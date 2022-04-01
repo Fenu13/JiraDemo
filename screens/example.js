@@ -87,3 +87,29 @@ function RefreshSpinner() {
 }
 
 export default RefreshSpinner;
+
+
+
+
+
+
+<FlatList
+data={data}
+keyExtractor={(index,item) =>{index.key}}
+renderItem={
+  ({item})=>{
+  return(
+  <View style={{backgroundColor:'#fff',marginHorizontal:20,borderWidth:1}}>
+  <Text >My Name is {item.name}</Text>
+    <View style={{marginHorizontal:20,marginVertical:20}}>
+    <Text >My Name is {item.name}</Text>
+    <Text>My Name is {item.name} and age is {item.age}</Text>
+ 
+    </View>
+  </View>
+  )
+  }
+}
+
+/>
+  

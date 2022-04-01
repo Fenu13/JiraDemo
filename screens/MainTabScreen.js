@@ -12,6 +12,7 @@ import WorkspaceScreen from './WorkspaceScreen';
 import MoreScreen from './MoreScreen';
 
 
+
 const HomeStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
@@ -43,7 +44,7 @@ const MainTabScreen = ({navigation}) => (
           tabBarLabel: 'Profile',
           tabBarColor: '#009387',
           tabBarIcon: ({ color }) => (
-            <Icon name="person" color={color} size={26} />
+            <Icon name="person-circle" color={color} size={26} />
           ),
         }}
       />
@@ -87,6 +88,7 @@ const HomeStackScreen = ({navigation}) => (
         }
     }}>
         <HomeStack.Screen name="Home123" component={HomeScreen}  />
+   
 </HomeStack.Navigator>
 );
 
@@ -96,7 +98,7 @@ const ProfileStackScreen = ({navigation}) => (
           backgroundColor: '#009387',
           },
           headerTintColor: '#fff',
-          headerStyle:false,
+          headerShown:false,
           headerTitleStyle: {
           fontWeight: 'bold'
           }
@@ -112,7 +114,7 @@ const WorkSpaceStackScreen = ({navigation}) => (
           backgroundColor: '#009387',
           },
           headerTintColor: '#fff',
-          headerStyle:false,
+          headerShown:false,
           headerTitleStyle: {
           fontWeight: 'bold'
           }
@@ -129,7 +131,7 @@ const MoreStackScreen = ({navigation}) => (
           backgroundColor: '#009387',
           },
           headerTintColor: '#fff',
-          headerStyle:false,
+          headerShown:false,
           headerTitleStyle: {
           fontWeight: 'bold'
           }
