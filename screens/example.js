@@ -113,3 +113,24 @@ renderItem={
 
 />
   
+
+
+//HOMESCREEN.JS
+ // const [name,setName] = useState('Fenil')
+// const [person,setPerson] = useState({name:'deep' , age :40})
+
+// const clickHandler =() =>{
+//   setName('ToDO');
+//   setPerson({name:'dsdsdsa', age :45})
+// }
+
+
+// const clickHandler1 =() =>{
+//   setName('Remaining');
+//   setPerson({name:'dsdsdfgfgdfgsa', age :20})
+// }
+
+// const clickHandler2 =() =>{
+//   setName('Done');
+//   setPerson({name:'Deep', age :19})
+// }

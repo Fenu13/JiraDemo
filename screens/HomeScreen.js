@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,Component} from 'react';
 import { 
   View, 
   Text, 
@@ -11,11 +11,12 @@ import {
   Button,
   ScrollView,
   ToastAndroid,
-  FlatList
+  FlatList,
+
 } from 'react-native';
 
-import WorkIcon from 'react-native-vector-icons/Foundation';
-
+import { jira } from '../axios/axios';
+import WorkIcon from 'react-native-vector-icons/Foundation'
 
 const data = [{
 
@@ -31,7 +32,10 @@ const data = [{
   
 
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation,data}) => {
+
+
+
 const [name,setName] = useState('Fenil')
 const [person,setPerson] = useState({name:'deep' , age :40})
 
@@ -50,36 +54,47 @@ const clickHandler2 =() =>{
   setName('Done');
   setPerson({name:'Deep', age :19})
 }
- 
+    // const ListEmptyComponent = ()=>{
+    //   return <View>
+    //     <Text>No Data Found</Text>
+
+    //   </View>
+    // }
+
+    const renderItem =({item}) =>{
+      console.log('item' ,item);
+
+      return(
+          <TouchableOpacity>
+            <Text>Task-1 </Text>
+          </TouchableOpacity>
+
+      )
+    } 
     return (
      
-      <View style={{flex:1}}>
-      <View style={{flex:0.1}}>
-      <ScrollView style={{}}
-        horizontal={true}
-       contentContainerStyle={{width:'100%', alignItems:'center'}}
-        >
-
-          <View style={{flexDirection:'row',alignItems:'center',paddingLeft:50,paddingTop:5}}>
+      <View style={{flex:1}}> 
+          <View style={{flex:0.1}}>
+            <ScrollView horizontal={true} contentContainerStyle={{width:'100%', alignItems:'center'}}>
+      
+              <View style={{flexDirection:'row',alignItems:'center',paddingLeft:50,paddingTop:5}}>
                 <TouchableOpacity 
-                  style={{borderRadius:360,borderWidth:1,height:30,width:30,justifyContent:'center'}}
-                onPress={clickHandler}>
+                    style={{borderRadius:360,borderWidth:1,height:30,width:30,justifyContent:'center'}}
+                    onPress={clickHandler}>
                     <Text style={{alignSelf:'center',}}>FC</Text>
                 </TouchableOpacity>  
+             </View>
+            </ScrollView>
           </View>
-        </ScrollView>
-      </View>
-      <View style={{flex:0.1}}>
-        <ScrollView style={{}}
-        horizontal={true}
-       contentContainerStyle={{width:'100%', alignItems:'center'}}
-        >
-          <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                <TouchableOpacity 
-                  style={styles.button}
-                onPress={clickHandler}>
-                    <Text style={styles.text}>To Do</Text>
-                </TouchableOpacity>       
+      
+          <View style={{flex:0.1}}>
+            <ScrollView horizontal={true} contentContainerStyle={{width:'100%', alignItems:'center'}}>
+                <View style={{flexDirection:'row',justifyContent:'space-between'}}>     
+                 <TouchableOpacity 
+                    style={styles.button}
+                    onPress={clickHandler}>
+                        <Text style={styles.text}>To Do</Text>
+                   </TouchableOpacity>       
 
                   <TouchableOpacity 
                   style={styles.button}
@@ -94,21 +109,30 @@ const clickHandler2 =() =>{
                 </TouchableOpacity>    
                 </View>
                 </ScrollView>
+                </View>
 
-                </View>
+
                 <ScrollView contentContainerStyle={{width:'100%'}}  > 
-              <View style={{backgroundColor:'#fff',marginHorizontal:20,borderWidth:1,borderColor:'grey'}}>
-              <Text style={{fontSize:20}}>To Do Issues</Text>
-                <View style={{marginHorizontal:20,marginVertical:20}}>
-                  <Text>Create Issue</Text>
-                  <Text style={{paddingTop:10}}><WorkIcon name="checkbox" size={20}/>Fenil</Text>
-                </View>
+                    <View style={{backgroundColor:'#fff',marginHorizontal:20,borderWidth:1,borderColor:'grey'}}>
+                       <Text style={{fontSize:20}}>To Do Issues</Text>
+                     <View style={{marginHorizontal:20,marginVertical:20}}>
+                        <Text>Create Issue</Text>
+                        <Text style={{paddingTop:10}}><WorkIcon name="checkbox" size={20}/>Fenil</Text>
+                     </View>
                 
-              </View>
+                     {/* <FlatList 
+                        renderItem={renderItem}  
+                        data={data} 
+                        keyExtractor={(item) => String(item._id)}
+                        ListEmptyComponent={ListEmptyComponent}
+
+                      
+                     /> */}
+                    </View>
             
-            </ScrollView>
+                 </ScrollView>
               
-                </View>
+      </View>
 
    
     );

@@ -16,13 +16,15 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-
-
+import { jira } from '../axios/axios';
+import * as action from '../axios/action'
+import axios from 'axios';
 const SignUpScreen = ({navigation}) => {
 
     const [data, setData] = React.useState({
         username: '',
         password: '',
+        email:'',
         confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
@@ -86,6 +88,20 @@ const SignUpScreen = ({navigation}) => {
             confirm_secureTextEntry: !data.confirm_secureTextEntry
         });
     }
+
+    const userRegister = () => {
+       
+         jira.post('/users',{name:data.username,email:data.email,password:data.password,confirm_password:data.confirm_password},{
+             headers:{
+                Accept:"application/json"
+            
+             }
+         }).then((response) => {
+            console.log(response.data);
+          }).catch(error => console.log(error));;
+       
+    }
+
 
     return (
       <View style={styles.container}>
@@ -228,7 +244,7 @@ const SignUpScreen = ({navigation}) => {
             <View style={styles.button}>
             <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => navigation.navigate('MainTabScreen')}
+                    onPress={() => userRegister()}
                 >
               
                 <LinearGradient 
@@ -272,7 +288,7 @@ const styles = StyleSheet.create({
         paddingBottom: 50
     },
     footer: {
-        flex: Platform.OS === 'ios' ? 3 : 5,
+        flex: Platform.OS === 'ios' ? 4 : 5,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
