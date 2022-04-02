@@ -78,9 +78,9 @@ const SignInScreen = ({navigation}) => {
     }
  
     const loginHandle = (email,password) =>{
-        const foundUser =Users.filter(item =>{
-            return email === item.email && password == item.password;
-        })
+        // const foundUser =Users.filter(item =>{
+        //     return email === item.email && password == item.password;
+        // })
 
         if(data.email.length ==0 || data.password.length==0){
             Alert.alert('Wrong Input','email or Password cannot be empty',[
