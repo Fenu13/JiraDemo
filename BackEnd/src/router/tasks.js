@@ -23,4 +23,40 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
+router.get("/getSelectTask/:status", async (req, res) => {
+  const _id = req.params.status;
+  try {
+    const tasks = await Task.find({ status: _id });
+
+    if (!tasks) {
+      return res.status(404).send();
+    }
+    res.send(tasks);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
+router.patch("/updateTask/:id", auth, async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowUpdates = ["status"];
+  const isValidOperation = updates.every((update) =>
+    allowUpdates.includes(update)
+  );
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid Updates !" });
+  }
+  try {
+    const tasks = await Task.findById(req.params.id);
+    updates.forEach((update) => (tasks[update] = req.body[update]));
+    await tasks.save();
+    if (!tasks) {
+      return res.status(404).send();
+    }
+    res.send(tasks);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 module.exports = router;

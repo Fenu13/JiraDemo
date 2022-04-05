@@ -17,6 +17,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import {jira} from '../axios/axios';
 import * as action from '../axios/action';
+import DrawerContent from './DrawerContent';
+import MainTabScreen from './MainTabScreen';
 const SignUpScreen = ({navigation}) => {
   const [data, setData] = React.useState({
     username: '',
@@ -251,7 +253,7 @@ const SignUpScreen = ({navigation}) => {
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => userRegister()}>
+              onPress={() => navigation.navigate(DrawerContent)}>
               <LinearGradient
                 colors={['#08d4c4', '#01ab9d']}
                 style={styles.signIn}>

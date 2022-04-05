@@ -1,31 +1,37 @@
-const mongoose = require('mongoose')
-const validator = require('validator')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const req = require('express/lib/request')
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const req = require("express/lib/request");
 
-const tasksSchema = new mongoose.Schema({
-    todo_tasks :{
-        type : String,
-        
-        
+const tasksSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
     },
-    processing_tasks :{
-        type : String,
-     
-        
+    description: {
+      type: String,
     },
-    done_tasks :{
-        type : String,
-        
-        
+
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+      required: true,
     },
-},
-{
-    timestamps : true
-})
+    attachment: {
+      type: String,
+    },
+    status: {
+      type: Number,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Task = mongoose.model('Task',tasksSchema)
+const Task = mongoose.model("Task", tasksSchema);
 
-module.exports = Task
-
+module.exports = Task;

@@ -1,4 +1,5 @@
 import {GET_TASK} from './taskAction';
+
 const initialState = {
   task: [],
 };
