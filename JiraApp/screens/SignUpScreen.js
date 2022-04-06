@@ -106,36 +106,10 @@ const SignUpScreen = ({navigation}) => {
       )
       .then(response => {
         console.log(response.data);
+        navigation.navigate('mainscreen');
       })
       .catch(error => console.log(error));
   };
-
-  //   const emailSend = () => {
-  //     const nodemailer = require('nodemailer');
-
-  //     var transport = nodemailer.createTransport({
-  //       host: 'smtp.mailtrap.io',
-  //       port: 2525,
-  //       auth: {
-  //         user: 'bb9c693c483d10',
-  //         pass: '8bf52a434b7c46',
-  //       },
-  //     });
-
-  //     message = {
-  //       from: 'fchheda13@email.com',
-  //       to: 'fenuchheda13@email.com',
-  //       subject: 'Subject',
-  //       text: 'Hello SMTP Email',
-  //     };
-  //     transport.sendMail(message, function (err, info) {
-  //       if (err) {
-  //         console.log(err);
-  //       } else {
-  //         console.log(info);
-  //       }
-  //     });
-  //   };
 
   return (
     <View style={styles.container}>
@@ -253,7 +227,9 @@ const SignUpScreen = ({navigation}) => {
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => navigation.navigate(DrawerContent)}>
+              onPress={() => {
+                userRegister();
+              }}>
               <LinearGradient
                 colors={['#08d4c4', '#01ab9d']}
                 style={styles.signIn}>

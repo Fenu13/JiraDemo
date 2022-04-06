@@ -2,10 +2,12 @@ const express = require("express");
 const router = new express.Router();
 const User = require("../models/user");
 const auth = require("../middleware/auth");
+//const nodemailer = require("nodemailer");
 
 router.post("/users", async (req, res) => {
   console.log(req);
   const user = new User(req.body);
+  //const username = new User(req.body.email);
   //    console.log('Send')
   //    console.log('user=',user)
   //     //if(user.password !== user.confirmPassword) return res.send("!Match")
@@ -13,6 +15,30 @@ router.post("/users", async (req, res) => {
   try {
     await user.save();
     const token = await user.generateAuthToken();
+
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: "fchheda13@gmail.com",
+    //     pass: "fenil1311",
+    //   },
+    // });
+
+    // const mailOptions = {
+    //   from: "fchheda13@gmail.com",
+    //   to: username,
+    //   subject: "Sending Email using Node.js",
+    //   text: "That was easy!",
+    // };
+
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log("Email sent: " + info.response);
+    //   }
+    // });
+
     res.status(201).send({ user, token });
   } catch (e) {
     res.status(400).send("Email Alreday Exists");

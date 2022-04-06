@@ -17,9 +17,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import {AuthContext} from '../components/context';
-import Users from '../model/users';
+//import Users from '../model/users';
 import {jira} from '../axios/axios';
+import {getLogin} from '../store/User/userAction';
+import {useDispatch} from 'react-redux';
 const SignInScreen = ({navigation}) => {
+  // const tasks = useSelector(state => state.users.tasks);
   const [data, setData] = React.useState({
     email: '',
     password: '',
@@ -30,8 +33,7 @@ const SignInScreen = ({navigation}) => {
     isValidPasword: true,
   });
 
-  const {signIn} = React.useContext(AuthContext);
-
+  const dispatch = useDispatch();
   const textInputChanged = val => {
     if (val.trim().length >= 4) {
       setData({
@@ -74,25 +76,25 @@ const SignInScreen = ({navigation}) => {
     });
   };
 
-  const loginHandle = (email, password) => {
-    const foundUser = Users.filter(item => {
-      return email === item.email && password == item.password;
-    });
+  // const loginHandle = (email, password) => {
+  //   const foundUser = Users.filter(item => {
+  //     return email === item.email && password == item.password;
+  //   });
 
-    if (data.email.length == 0 || data.password.length == 0) {
-      Alert.alert('Wrong Input', 'email or Password cannot be empty', [
-        {text: 'Okay'},
-      ]);
-      return;
-    }
-    if (foundUser.length == 0) {
-      Alert.alert('Invalid Uesr', 'email or Password is Incorrect', [
-        {text: 'Okay'},
-      ]);
-      return;
-    }
-    signIn(foundUser);
-  };
+  //   if (data.email.length == 0 || data.password.length == 0) {
+  //     Alert.alert('Wrong Input', 'email or Password cannot be empty', [
+  //       {text: 'Okay'},
+  //     ]);
+  //     return;
+  //   }
+  //   if (foundUser.length == 0) {
+  //     Alert.alert('Invalid Uesr', 'email or Password is Incorrect', [
+  //       {text: 'Okay'},
+  //     ]);
+  //     return;
+  //   }
+  //   signIn(foundUser);
+  // };
 
   const handleValidUser = val => {
     if (val.length >= 4) {
@@ -139,31 +141,7 @@ const SignInScreen = ({navigation}) => {
             </Text>
           </Animatable.View>
         )}
-        {/* <Text style={[styles.text_footer,{
-                 marginTop:35
-            }]}>Email</Text>
-            <View style={styles.action}>
-                <FontAwesome
-                    name="user-o"
-                    color="#05375a"
-                    size={20}
-                />
-                <TextInput placeholder='Your Email'
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    onChangeText={(val) => textInputChange(val)}
-                />
-                {data.check_textInputChange?
-                <Animatable.View animation="bounceIn">
-                    <Feather
-                    name="check-circle"
-                    color="green"
-                    size={20}
-                />
-                </Animatable.View>
-                
-                : null }
-            </View> */}
+
         <Text
           style={[
             styles.text_footer,
@@ -206,7 +184,9 @@ const SignInScreen = ({navigation}) => {
           <TouchableOpacity
             style={styles.signIn}
             onPress={() => {
-              loginHandle(data.email, data.password);
+              console.log('Enter');
+              dispatch(getLogin());
+              navigation.navigate('mainscreen');
             }}>
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}

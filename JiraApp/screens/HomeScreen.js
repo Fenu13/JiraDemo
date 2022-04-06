@@ -14,44 +14,47 @@ import {
   Modal,
 } from 'react-native';
 
-import * as taskAction from '../store/Task/taskAction';
+import {getTask} from '../store/Task/taskAction';
 import {useSelector, useDispatch} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
 import {jira} from '../axios/axios';
 import WorkIcon from 'react-native-vector-icons/Foundation';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const HomeScreen = ({navigation, data}) => {
-  const [name, setName] = useState('Fenil');
-  const [person, setPerson] = useState({name: 'deep', age: 40});
   const [openPopUP, setOpenPopUp] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [selectedValue, setSelectedValue] = useState(0);
+  const [taskLane, setTaskLane] = useState(0);
+  const [token, setToken] = useState(null);
+
   // state.rootreducer.reducer
   const tasks = useSelector(state => state.tasks.tasks);
   const click = item => {
     console.log(item);
     setActiveItem(item);
   };
+  useEffect(() => {
+    AsyncStorage.getItem('userToken').then(res => {
+      if (res) {
+        setToken(
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjRjYmExMDVkNjc5MmI2OGNiODNlNDciLCJpYXQiOjE2NDkxOTU1NTJ9.yDsYjNnwi1GIM-uauRe8tNgHGv1gZAjBY6Taor14W-c',
+        );
+      }
+    });
+  }, []);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(taskAction.getTask(0));
-  }, []);
+    dispatch(getTask(taskLane, token));
+  }, [taskLane]);
 
-  const clickHandler = () => {
-    setName('ToDO');
-    setPerson({name: 'dsdsdsa', age: 45});
-  };
+  const updateTask = async id => {
+    console.log('Id=', id);
+    console.log('Selected VA=', selectedValue);
 
-  const clickHandler1 = () => {};
-
-  const clickHandler2 = () => {
-    setName('Done');
-    setPerson({name: 'Deep', age: 19});
-  };
-
-  const updateTask = id => {
-    console.log('jhgj', id);
+    console.log(token);
     jira
       .patch(
         `/updateTask/${id}`,
@@ -61,11 +64,13 @@ const HomeScreen = ({navigation, data}) => {
         {
           headers: {
             Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
           },
         },
       )
       .then(response => {
-        console.log(response.data);
+        console.log('DATA====', response.data);
+        dispatch(getTask(taskLane, token));
       })
       .catch(error => console.log(error));
   };
@@ -91,7 +96,7 @@ const HomeScreen = ({navigation, data}) => {
                 width: 30,
                 justifyContent: 'center',
               }}
-              onPress={clickHandler}>
+              onPress={() => {}}>
               <Text style={{alignSelf: 'center'}}>FC</Text>
             </TouchableOpacity>
           </View>
@@ -103,15 +108,27 @@ const HomeScreen = ({navigation, data}) => {
           horizontal={true}
           contentContainerStyle={{width: '100%', alignItems: 'center'}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity style={styles.button} onPress={clickHandler}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                setTaskLane(0);
+              }}>
               <Text style={styles.text}>To Do</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={clickHandler1}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                setTaskLane(1);
+              }}>
               <Text style={styles.text}>Processing</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={clickHandler2}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                setTaskLane(2);
+              }}>
               <Text style={styles.text}>Done</Text>
             </TouchableOpacity>
           </View>
@@ -128,10 +145,11 @@ const HomeScreen = ({navigation, data}) => {
             <TouchableOpacity
               style={{
                 backgroundColor: '#fff',
-                marginHorizontal: 20,
+                marginHorizontal: 30,
                 borderWidth: 1,
                 padding: 20,
                 borderRadius: 10,
+                marginVertical: 5,
               }}
               onPress={() => {
                 click(item);

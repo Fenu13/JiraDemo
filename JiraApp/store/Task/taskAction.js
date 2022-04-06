@@ -1,14 +1,13 @@
 import {jira} from '../../axios/axios';
 export const GET_TASK = 'GETTASK';
 
-export const getTask = status => {
+export const getTask = (status, token) => {
   return async dispatch => {
     try {
-      const response = await jira.get('/getSelectTask/0', {
-        // headers: {
-        //   Authorization:
-        //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjRiNDk0YjgzOGIxZGM2YTRmMjI5OTQiLCJpYXQiOjE2NDkxMDExMzF9.99NHuqQnBFp6_wH0rlQac8HAjn952p6vGAovjabXseY',
-        // },
+      const response = await jira.get(`/getSelectTask/${status}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const resData = response.data;

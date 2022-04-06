@@ -1,41 +1,37 @@
-// import {GET_LOGIN} from './userAction';
+import {getLogin} from './userAction';
 
-// const initalLoginState = {
-//   isLoading: true,
-//   userName: null,
-//   userToken: null,
-// };
+const initalLoginState = {
+  isLoading: true,
+  userName: null,
+  userToken: null,
+  users: [],
+};
 
-// const loginReducer = (prevState, action) => {
-//   switch (action.type) {
-//     case 'RETRIEVE_TOKEN': //For First Time Login previously or not
-//       return {
-//         ...prevState,
-//         userToken: action.token,
-//         isLoading: false,
-//       };
-//     case 'LOGIN':
-//       return {
-//         ...prevState,
-//         userName: action.id,
-//         userToken: action.token,
-//         isLoading: false,
-//       };
-//     case 'LOGOUT':
-//       return {
-//         ...prevState,
-//         userName: null,
-//         userToken: null,
-//         isLoading: false,
-//       };
-//     case 'REGISTER':
-//       return {
-//         ...prevState,
-//         userName: action.id,
-//         userToken: action.token,
-//         isLoading: false,
-//       };
-//   }
-// };
+const loginReducer = (prevState = initalLoginState, action) => {
+  switch (action.type) {
+    case 'RETRIEVE_TOKEN': //For First Time Login previously or not
+      return {
+        ...prevState,
+        userToken: action.token,
+        isLoading: false,
+      };
+    case 'GET_LOGIN':
+      return {
+        ...prevState,
+        users: action.user,
+        isLoading: false,
+      };
 
-// export default loginReducer;
+    case 'LOGOUT':
+      return {
+        ...prevState,
+        userName: null,
+        userToken: null,
+        isLoading: false,
+      };
+    default:
+      return prevState;
+  }
+};
+
+export default loginReducer;
