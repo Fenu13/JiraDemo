@@ -15,19 +15,13 @@ import {AuthContext} from './components/context';
 
 import RootStackScreen from './screens/RootStackScreen';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import NavigationScreen from './screens/NavigationScreen';
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const Drawer = createDrawerNavigator();
 const App = () => {
   const [users, setUsers] = useState(null);
-  useEffect(() => {
-    AsyncStorage.getItem('userToken').then(res => {
-      if (res) {
-        setUsers(res);
-      }
-    });
-  }, []);
+
   // const [isLoading, setIsLoading] = React.useState(true);
   //  const [userToken, setUserToken] = React.useState(null);
 
@@ -42,7 +36,7 @@ const App = () => {
   //     case 'RETRIEVE_TOKEN': //For First Time Login previously or not
   //       return {
   //         ...prevState,
-  //         userToken: action.token,
+  //         : action.token,
   //         isLoading: false,
   //       };
   //     case 'LOGIN':
@@ -132,18 +126,10 @@ const App = () => {
   //     </View>
   //   );
   // }
+  console.log('User==', users);
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        {users !== null ? (
-          <Drawer.Navigator
-            drawerContent={props => <DrawerContent {...props} />}>
-            <Drawer.Screen name="Jira Software" component={MainTabScreen} />
-          </Drawer.Navigator>
-        ) : (
-          <RootStackScreen />
-        )}
-      </NavigationContainer>
+      <NavigationScreen />
     </Provider>
   );
 };

@@ -16,13 +16,12 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import {AuthContext} from '../components/context';
-//import Users from '../model/users';
+
 import {jira} from '../axios/axios';
 import {getLogin} from '../store/User/userAction';
 import {useDispatch} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 const SignInScreen = ({navigation}) => {
-  // const tasks = useSelector(state => state.users.tasks);
   const [data, setData] = React.useState({
     email: '',
     password: '',
@@ -185,8 +184,21 @@ const SignInScreen = ({navigation}) => {
             style={styles.signIn}
             onPress={() => {
               console.log('Enter');
-              dispatch(getLogin());
-              navigation.navigate('mainscreen');
+              if (data.email !== '' && data.password !== '') {
+                dispatch(getLogin(data.email, data.password)).then(
+                  async res => {
+                    if (res) {
+                      await AsyncStorage.setItem('userToken', res.user.token);
+                    }
+                  },
+                );
+              } else {
+                Alert.alert(
+                  'Wrong Input',
+                  'email or Password cannot be empty',
+                  [{text: 'Okay'}],
+                );
+              }
             }}>
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}

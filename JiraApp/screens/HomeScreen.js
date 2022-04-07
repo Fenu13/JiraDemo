@@ -35,11 +35,10 @@ const HomeScreen = ({navigation, data}) => {
     setActiveItem(item);
   };
   useEffect(() => {
+    // await AsyncStorage.setItem('userToken', userToken);
     AsyncStorage.getItem('userToken').then(res => {
       if (res) {
-        setToken(
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjRjYmExMDVkNjc5MmI2OGNiODNlNDciLCJpYXQiOjE2NDkxOTU1NTJ9.yDsYjNnwi1GIM-uauRe8tNgHGv1gZAjBY6Taor14W-c',
-        );
+        setToken(res);
       }
     });
   }, []);
@@ -47,8 +46,11 @@ const HomeScreen = ({navigation, data}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTask(taskLane, token));
-  }, [taskLane]);
+    if (token) {
+      console.log('token=', token);
+      dispatch(getTask(taskLane, token));
+    }
+  }, [taskLane, token]);
 
   const updateTask = async id => {
     console.log('Id=', id);
@@ -77,7 +79,7 @@ const HomeScreen = ({navigation, data}) => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={{flex: 0.1}}>
+      <View style={{height: 40}}>
         <ScrollView
           horizontal={true}
           contentContainerStyle={{width: '100%', alignItems: 'center'}}>
@@ -103,10 +105,13 @@ const HomeScreen = ({navigation, data}) => {
         </ScrollView>
       </View>
 
-      <View style={{flex: 0.1}}>
+      <View style={{height: 40, marginBottom: 10}}>
         <ScrollView
           horizontal={true}
-          contentContainerStyle={{width: '100%', alignItems: 'center'}}>
+          contentContainerStyle={{
+            width: '100%',
+            alignItems: 'center',
+          }}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TouchableOpacity
               style={styles.button}
@@ -137,12 +142,14 @@ const HomeScreen = ({navigation, data}) => {
 
       <FlatList
         data={tasks}
-        keyExtractor={(index, item) => {
-          index.key;
+        keyExtractor={(item, index) => {
+          return item.id;
         }}
-        renderItem={({item}) => {
+        contentContainerStyle={{paddingVertical: 10}}
+        renderItem={({item, index}) => {
           return (
             <TouchableOpacity
+              key={item.id}
               style={{
                 backgroundColor: '#fff',
                 marginHorizontal: 30,

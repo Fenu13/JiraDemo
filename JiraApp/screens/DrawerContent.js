@@ -12,16 +12,18 @@ import {
   Switch,
 } from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-
+import {useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PersonIcon from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import WorkIcon from 'react-native-vector-icons/Foundation';
 import {AuthContext} from '../components/context';
+import {setUserData} from '../store/User/userAction';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export function DrawerContent(props) {
   const paperTheme = useTheme();
-
+  const dispatch = useDispatch();
   //const {signOut, toggleTheme} = React.useContext(AuthContext);
 
   return (
@@ -112,8 +114,10 @@ export function DrawerContent(props) {
             <Icon name="exit-to-app" color={color} size={size} />
           )}
           label="Sign Out"
-          onPress={() => {
-            //     signOut();
+          onPress={async () => {
+            dispatch(setUserData(null));
+            await AsyncStorage.removeItem('userData');
+            await AsyncStorage.removeItem('userToken');
           }}
         />
       </Drawer.Section>

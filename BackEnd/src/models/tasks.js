@@ -14,12 +14,25 @@ const tasksSchema = new mongoose.Schema(
       type: String,
     },
 
-    owner: {
+    created_by: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
       required: true,
     },
+    reporter: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+      required: true,
+    },
+    assign_to: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+      required: true,
+    },
+
     attachment: {
       type: String,
     },

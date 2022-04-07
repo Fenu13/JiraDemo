@@ -1,10 +1,8 @@
-import {getLogin} from './userAction';
-
 const initalLoginState = {
   isLoading: true,
   userName: null,
   userToken: null,
-  users: [],
+  users: null,
 };
 
 const loginReducer = (prevState = initalLoginState, action) => {
@@ -24,10 +22,7 @@ const loginReducer = (prevState = initalLoginState, action) => {
 
     case 'LOGOUT':
       return {
-        ...prevState,
-        userName: null,
-        userToken: null,
-        isLoading: false,
+        initalLoginState,
       };
     default:
       return prevState;

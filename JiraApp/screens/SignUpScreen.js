@@ -106,7 +106,7 @@ const SignUpScreen = ({navigation}) => {
       )
       .then(response => {
         console.log(response.data);
-        navigation.navigate('mainscreen');
+        navigation.navigate('MainScreen');
       })
       .catch(error => console.log(error));
   };

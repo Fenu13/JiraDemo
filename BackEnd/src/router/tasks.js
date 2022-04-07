@@ -4,8 +4,13 @@ const Task = require("../models/tasks");
 const auth = require("../middleware/auth");
 
 router.post("/newtasks", auth, async (req, res) => {
-  const tasks = new Task(req.body);
-
+  const createdby = req?.user?.id;
+  // console.log("Created ==", req.body);
+  const bodydata = req.body;
+  bodydata.created_by = createdby;
+  // console.log("body==", bodydata);
+  const tasks = new Task(bodydata);
+  // console.log("tasks ==", tasks);
   try {
     await tasks.save();
     res.status(201).send(tasks);
@@ -14,16 +19,17 @@ router.post("/newtasks", auth, async (req, res) => {
   }
 });
 
-router.get("/tasks", async (req, res) => {
+router.get("/tasks", auth, async (req, res) => {
   try {
     const tasks = await Task.find({});
+
     res.send(tasks);
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-router.get("/getSelectTask/:status", async (req, res) => {
+router.get("/getSelectTask/:status", auth, async (req, res) => {
   const _id = req.params.status;
   try {
     const tasks = await Task.find({ status: _id });
