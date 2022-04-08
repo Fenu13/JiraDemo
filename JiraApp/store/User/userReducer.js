@@ -1,3 +1,5 @@
+import {GET_LOGIN, GET_USER} from './userAction';
+
 const initalLoginState = {
   isLoading: true,
   userName: null,
@@ -13,7 +15,7 @@ const loginReducer = (prevState = initalLoginState, action) => {
         userToken: action.token,
         isLoading: false,
       };
-    case 'GET_LOGIN':
+    case GET_LOGIN:
       return {
         ...prevState,
         users: action.user,
@@ -23,6 +25,11 @@ const loginReducer = (prevState = initalLoginState, action) => {
     case 'LOGOUT':
       return {
         initalLoginState,
+      };
+
+    case 'GET_USER':
+      return {
+        users: action.user,
       };
     default:
       return prevState;

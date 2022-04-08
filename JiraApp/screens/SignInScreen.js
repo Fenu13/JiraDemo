@@ -183,7 +183,6 @@ const SignInScreen = ({navigation}) => {
           <TouchableOpacity
             style={styles.signIn}
             onPress={() => {
-              console.log('Enter');
               if (data.email !== '' && data.password !== '') {
                 dispatch(getLogin(data.email, data.password)).then(
                   async res => {

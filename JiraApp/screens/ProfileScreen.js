@@ -11,32 +11,68 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
+import {jira} from '../axios/axios';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
+import {useState} from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 const ProfileScreen = ({navigation}) => {
+  const userData = useSelector(state => state.userData.users);
+  const user = userData.user;
+
   const [data, setData] = React.useState({
-    username: '',
-    password: '',
-    email: '',
-    confirm_password: '',
+    name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
+    email: userData?.user?.email ?? '',
     check_textInputChange: false,
     secureTextEntry: true,
   });
 
+  const [fName, setfName] = useState(userData?.user?.name ?? '');
+  const [email, setEmail] = useState(userData?.user?.email ?? '');
+
+  // const submitValue = () => {
+  //   const frmdetails = data;
+  //   console.log(frmdetails);
+  // };
+  const updateProfile = async () => {
+    const jsonValue = await AsyncStorage.getItem('userData');
+    const userObj = JSON.parse(jsonValue);
+    const user_id = userObj.user._id;
+    const token = userObj.token;
+    console.log('Jdhfgdsf', data);
+    try {
+      await jira
+        .patch(`/user/me/${user_id}`, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(res => {
+          console.log('RESSS', res);
+        });
+      alert('Your Data Has Updated !');
+      // const resData = response.data;
+    } catch (err) {
+      console.log('ERROR', err);
+      throw err;
+    }
+  };
   const textInputChange = val => {
     if (val.length !== 0) {
       setData({
         ...data,
-        username: val,
+        name: val,
         check_textInputChange: true,
       });
     } else {
       setData({
         ...data,
-        username: val,
+        name: val,
         check_textInputChange: false,
       });
     }
@@ -45,29 +81,16 @@ const ProfileScreen = ({navigation}) => {
     if (val.length !== 0) {
       setData({
         ...data,
-        email: val,
+        email: val.users.email,
         check_textInputChanged: true,
       });
     } else {
       setData({
         ...data,
-        email: val,
+        email: val.users.email,
         check_textInputChanged: false,
       });
     }
-  };
-  const handlePasswordChange = val => {
-    setData({
-      ...data,
-      password: val,
-    });
-  };
-
-  const updateSecureTextEntry = () => {
-    setData({
-      ...data,
-      secureTextEntry: !data.secureTextEntry,
-    });
   };
 
   return (
@@ -79,7 +102,7 @@ const ProfileScreen = ({navigation}) => {
         <View>
           <Animatable.Image
             animation="bounceIn"
-            source={require('../asserts/Logo.jpeg')}
+            source={require('../asserts/user.png')}
             style={styles.logo}
           />
         </View>
@@ -92,19 +115,20 @@ const ProfileScreen = ({navigation}) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <FontAwesome name="pencil" size={25} color={'red'} />
+          <FontAwesome name="pencil" size={25} color={'#fff'} />
         </TouchableOpacity>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
         <ScrollView>
-          <Text style={styles.text_footer}>Username</Text>
+          <Text style={styles.text_footer}>name</Text>
           <View style={styles.action}>
             <FontAwesome name="user-o" color="#05375a" size={20} />
             <TextInput
-              placeholder="Your Username"
+              placeholder="Your name"
               style={styles.textInput}
+              value={data?.name ?? ''}
               autoCapitalize="none"
-              onChangeText={val => textInputChange(val)}
+              onChangeText={e => setData({...data, name: e})}
             />
             {data.check_textInputChange ? (
               <Animatable.View animation="bounceIn">
@@ -126,8 +150,9 @@ const ProfileScreen = ({navigation}) => {
             <TextInput
               placeholder="Your Email"
               style={styles.textInput}
+              value={data?.email ?? ''}
               autoCapitalize="none"
-              onChangeText={val => textInputChanged(val)}
+              onChangeText={e => setData({...data, email: e})}
             />
             {data.check_textInputChanged ? (
               <Animatable.View animation="bounceIn">
@@ -135,36 +160,10 @@ const ProfileScreen = ({navigation}) => {
               </Animatable.View>
             ) : null}
           </View>
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}>
-            Password
-          </Text>
-          <View style={styles.action}>
-            <Feather name="lock" color="#05375a" size={20} />
-            <TextInput
-              placeholder="Your Password"
-              secureTextEntry={data.secureTextEntry ? true : false}
-              style={styles.textInput}
-              autoCapitalize="none"
-              onChangeText={val => handlePasswordChange(val)}
-            />
-            <TouchableOpacity onPress={updateSecureTextEntry}>
-              {data.secureTextEntry ? (
-                <Feather name="eye-off" color="grey" size={20} />
-              ) : (
-                <Feather name="eye" color="grey" size={20} />
-              )}
-            </TouchableOpacity>
-          </View>
+
           <Animatable.View style={styles.footer} animation="fadeInUpBig">
             <View style={styles.button}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('SignInScreen')}>
+              <TouchableOpacity onPress={() => updateProfile()}>
                 <LinearGradient
                   colors={['#08d4c4', '#01ab9d']}
                   style={styles.signIn}>

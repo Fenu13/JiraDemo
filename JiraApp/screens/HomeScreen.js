@@ -31,7 +31,7 @@ const HomeScreen = ({navigation, data}) => {
   // state.rootreducer.reducer
   const tasks = useSelector(state => state.tasks.tasks);
   const click = item => {
-    console.log(item);
+    //  console.log(item);
     setActiveItem(item);
   };
   useEffect(() => {
@@ -47,16 +47,15 @@ const HomeScreen = ({navigation, data}) => {
 
   useEffect(() => {
     if (token) {
-      console.log('token=', token);
+      //console.log('token=', token);
       dispatch(getTask(taskLane, token));
     }
   }, [taskLane, token]);
 
   const updateTask = async id => {
-    console.log('Id=', id);
-    console.log('Selected VA=', selectedValue);
+    // console.log('Id=', id);
+    //console.log('Selected VA=', selectedValue);
 
-    console.log(token);
     jira
       .patch(
         `/updateTask/${id}`,
@@ -71,7 +70,7 @@ const HomeScreen = ({navigation, data}) => {
         },
       )
       .then(response => {
-        console.log('DATA====', response.data);
+        //console.log('DATA====', response.data);
         dispatch(getTask(taskLane, token));
       })
       .catch(error => console.log(error));

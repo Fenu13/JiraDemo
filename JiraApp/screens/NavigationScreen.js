@@ -16,14 +16,12 @@ const NavigationScreen = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     AsyncStorage.getItem('userData').then(res => {
-      console.log('RESPO===', res);
       if (res) {
         dispatch(setUserData(JSON.parse(res)));
       }
     });
   }, []);
 
-  console.log('User=dsdsdzdzxdxzd', users);
   return (
     <NavigationContainer>
       {users !== null ? (

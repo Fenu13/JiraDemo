@@ -126,7 +126,7 @@ const App = () => {
   //     </View>
   //   );
   // }
-  console.log('User==', users);
+
   return (
     <Provider store={store}>
       <NavigationScreen />
