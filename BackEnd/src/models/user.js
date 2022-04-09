@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: Buffer,
     },
+    workspace_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "workspace",
+    },
     password: {
       type: String,
       required: true,
@@ -47,7 +52,13 @@ userSchema.virtual("tasks"),
   {
     ref: "Task",
     localField: "_id",
-    foreignField: "owner",
+    foreignField: "assign_to",
+  };
+userSchema.virtual("workspace"),
+  {
+    ref: "workspace",
+    localField: "_id",
+    foreignField: "user",
   };
 
 userSchema.methods.toJSON = function () {

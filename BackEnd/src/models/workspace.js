@@ -8,15 +8,10 @@ const workspaceSchema = new mongoose.Schema(
       required: true,
     },
 
-    users: [
-      {
-        text: String,
-        postedTo: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-      },
-    ],
+    description: {
+      type: String,
+      required: true,
+    },
   },
 
   {

@@ -32,7 +32,11 @@ const tasksSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
+    workspace_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "workspace",
+    },
     attachment: {
       type: String,
     },

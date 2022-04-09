@@ -10,17 +10,22 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
+  ImageBackground,
+  ImagePickerIOS,
 } from 'react-native';
 import {jira} from '../axios/axios';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {useState} from 'react';
-import axios from 'axios';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import ImagePicker from 'react-native-image-crop-picker';
+
 const ProfileScreen = ({navigation}) => {
   const userData = useSelector(state => state.userData.users);
   const user = userData.user;
@@ -35,10 +40,6 @@ const ProfileScreen = ({navigation}) => {
   const [fName, setfName] = useState(userData?.user?.name ?? '');
   const [email, setEmail] = useState(userData?.user?.email ?? '');
 
-  // const submitValue = () => {
-  //   const frmdetails = data;
-  //   console.log(frmdetails);
-  // };
   const updateProfile = async () => {
     const jsonValue = await AsyncStorage.getItem('userData');
     const userObj = JSON.parse(jsonValue);
@@ -62,62 +63,126 @@ const ProfileScreen = ({navigation}) => {
       throw err;
     }
   };
-  const textInputChange = val => {
-    if (val.length !== 0) {
-      setData({
-        ...data,
-        name: val,
-        check_textInputChange: true,
-      });
-    } else {
-      setData({
-        ...data,
-        name: val,
-        check_textInputChange: false,
-      });
-    }
-  };
-  const textInputChanged = val => {
-    if (val.length !== 0) {
-      setData({
-        ...data,
-        email: val.users.email,
-        check_textInputChanged: true,
-      });
-    } else {
-      setData({
-        ...data,
-        email: val.users.email,
-        check_textInputChanged: false,
-      });
-    }
+
+  const [image, setImage] = useState(null);
+
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7,
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      this.bs.current.snapTo(1);
+    });
   };
 
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7,
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      this.bs.current.snapTo(1);
+    });
+  };
+
+  renderInner = () => (
+    <View style={styles.panel}>
+      <View style={{alignItems: 'center'}}>
+        <Text style={styles.panelTitle}>Upload Photo</Text>
+        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.panelButton}
+        onPress={takePhotoFromCamera}>
+        <Text style={styles.panelButtonTitle}>Take Photo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.panelButton}
+        onPress={choosePhotoFromLibrary}>
+        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.panelButton}
+        onPress={() => this.bs.current.snapTo(1)}>
+        <Text style={styles.panelButtonTitle}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  );
+  renderHeader = () => (
+    <View style={styles.header1}>
+      <View style={styles.panelHeader}>
+        <View style={styles.panelHandle} />
+      </View>
+    </View>
+  );
+
+  bs = React.createRef();
+
+  fall = new Animated.Value(1);
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
-      <View style={styles.header}>
+      <BottomSheet
+        ref={this.bs}
+        snapPoints={[500, 0]} //How much it will open from bottom {x=0,y=1}
+        initialSnap={1} //
+        renderContent={this.renderInner}
+        renderHeader={this.renderHeader} //imp fun()
+        callbackNode={this.fall}
+        enabledGestureInteraction={true}
+      />
+      <Animated.View
+        style={{
+          margin: 20,
+          opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+        }}>
         <Text style={styles.text_header}>Update Profile!</Text>
-
-        <View>
-          <Animatable.Image
-            animation="bounceIn"
-            source={require('../asserts/user.png')}
-            style={styles.logo}
-          />
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
+            <View
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ImageBackground
+                source={image ? {uri: image} : require('../asserts/user.png')}
+                style={{height: 100, width: 100}}
+                imageStyle={{borderRadius: 15}}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="camera"
+                    size={35}
+                    color="#fff"
+                    style={{
+                      opacity: 0.7,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderColor: '#fff',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              </ImageBackground>
+            </View>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            top: 95,
-            right: 150,
-            zIndex: 999,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <FontAwesome name="pencil" size={25} color={'#fff'} />
-        </TouchableOpacity>
-      </View>
+      </Animated.View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
         <ScrollView>
           <Text style={styles.text_footer}>name</Text>
@@ -180,9 +245,6 @@ const ProfileScreen = ({navigation}) => {
 
 export default ProfileScreen;
 
-// const {height} = Dimensions.get('screen');
-// const height_logo = height * 0.2;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -194,6 +256,85 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 5,
     paddingBottom: 5,
+  },
+  panel: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 20,
+    // borderTopLeftRadius: 20,
+    // borderTopRightRadius: 20,
+    // shadowColor: '#000000',
+    // shadowOffset: {width: 0, height: 0},
+    // shadowRadius: 5,
+    // shadowOpacity: 0.4,
+  },
+  panelHeader: {
+    alignItems: 'center',
+  },
+  panelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#00000040',
+    marginBottom: 10,
+  },
+  panelTitle: {
+    fontSize: 27,
+    height: 35,
+  },
+  panelSubtitle: {
+    fontSize: 14,
+    color: 'gray',
+    height: 30,
+    marginBottom: 10,
+  },
+  panelButton: {
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: '#009387',
+    alignItems: 'center',
+    marginVertical: 7,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  action: {
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f2f2',
+    paddingBottom: 5,
+  },
+  actionError: {
+    flexDirection: 'row',
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#FF0000',
+    paddingBottom: 5,
+  },
+  header1: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#333333',
+    shadowOffset: {width: -1, height: -3},
+    shadowRadius: 2,
+    shadowOpacity: 0.4,
+    // elevation: 5,
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  panelHeader: {
+    alignItems: 'center',
+  },
+  panelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#00000040',
+    marginBottom: 10,
   },
   footer: {
     flex: Platform.OS === 'ios' ? 4 : 5,
@@ -211,9 +352,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 100,
     height: 100,
-    borderRadius: 360,
-
-    alignSelf: 'center',
   },
   text_footer: {
     color: '#05375a',

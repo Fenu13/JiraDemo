@@ -24,7 +24,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 export function DrawerContent(props) {
   const paperTheme = useTheme();
   const dispatch = useDispatch();
-  //const {signOut, toggleTheme} = React.useContext(AuthContext);
 
   return (
     <View style={{flex: 1}}>
@@ -39,21 +38,6 @@ export function DrawerContent(props) {
               <View style={{marginLeft: 15, flexDirection: 'column'}}>
                 <Title style={styles.title}>John Doe</Title>
                 <Caption style={styles.caption}>@j_doe</Caption>
-              </View>
-            </View>
-
-            <View style={styles.row}>
-              <View style={styles.section}>
-                <Paragraph style={[styles.paragraph, styles.caption]}>
-                  80
-                </Paragraph>
-                <Caption style={styles.caption}>Following</Caption>
-              </View>
-              <View style={styles.section}>
-                <Paragraph style={[styles.paragraph, styles.caption]}>
-                  100
-                </Paragraph>
-                <Caption style={styles.caption}>Followers</Caption>
               </View>
             </View>
           </View>
