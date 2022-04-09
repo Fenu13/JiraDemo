@@ -29,7 +29,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 const ProfileScreen = ({navigation}) => {
   const userData = useSelector(state => state.userData.users);
   const user = userData.user;
-
+  //console.log('User==', user);
   const [data, setData] = React.useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
     email: userData?.user?.email ?? '',

@@ -4,12 +4,23 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const multer = require("multer");
 const sharp = require("sharp");
+const Workspace = require("../models/workspace");
 
 router.post("/users", async (req, res) => {
-  console.log(req);
-  const user = new User(req.body);
+  // console.log(req);
 
   try {
+    const workspace = await Workspace.find({}).sort();
+    console.log("Works==", workspace[workspace.length - 1]);
+    const min_work = parseInt(workspace[0].register_no);
+    const max_work = parseInt(workspace[workspace.length - 1].register_no);
+    const random_workspace_id = Math.floor(
+      Math.random() * (max_work - min_work) + min_work
+    );
+    const workspace_data = await Workspace.find({
+      register_no: random_workspace_id,
+    });
+    const user = new User({ ...req.body, workspace_id: workspace_data[0]._id });
     await user.save();
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
@@ -169,6 +180,25 @@ router.get("/users/:id/avatar", async (req, res) => {
     res.send(user.avatar);
   } catch (e) {
     res.status(404).send();
+  }
+});
+
+router.get("/getuserbyworkspace/:id", auth, async (req, res) => {
+  const _id = req.params.id;
+  console.log("IIDD==", _id);
+
+  try {
+    const workspace = await Workspace.findById(_id);
+    console.log("WORKSPACE===", workspace);
+    if (!workspace) {
+      return res.status(404).send();
+    }
+    const users = await User.find({ workspace_id: _id });
+    const response = { ...workspace.doc, users: users };
+    res.send(response);
+  } catch (e) {
+    console.log("Error===", e);
+    res.status(500).send();
   }
 });
 
