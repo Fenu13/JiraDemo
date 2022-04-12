@@ -194,8 +194,10 @@ router.get("/getuserbyworkspace/:id", auth, async (req, res) => {
       return res.status(404).send();
     }
     const users = await User.find({ workspace_id: _id });
-    const response = { ...workspace.doc, users: users };
-    res.send(response);
+    // const response = { ...workspace._doc, users };
+    console.log("USER==", users);
+    //console.log("RESSS==", response);
+    res.send({ workspace: workspace, users });
   } catch (e) {
     console.log("Error===", e);
     res.status(500).send();
