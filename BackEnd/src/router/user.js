@@ -11,19 +11,25 @@ router.post("/users", async (req, res) => {
 
   try {
     const workspace = await Workspace.find({}).sort();
-    console.log("Works==", workspace[workspace.length - 1]);
-    const min_work = parseInt(workspace[0].register_no);
-    const max_work = parseInt(workspace[workspace.length - 1].register_no);
-    const random_workspace_id = Math.floor(
-      Math.random() * (max_work - min_work) + min_work
-    );
-    const workspace_data = await Workspace.find({
-      register_no: random_workspace_id,
-    });
-    const user = new User({ ...req.body, workspace_id: workspace_data[0]._id });
+    console.log("Works==", workspace);
+    let temp_workSpace = {};
+    if (workspace.length !== 0) {
+      const min_work = parseInt(workspace[0].register_no);
+      const max_work = parseInt(workspace[workspace.length - 1].register_no);
+      const random_workspace_id = Math.floor(
+        Math.random() * (max_work - min_work) + min_work
+      );
+      const workspace_data = await Workspace.find({
+        register_no: random_workspace_id,
+      });
+      temp_workSpace = { workspace_id: workspace_data[0]._id };
+    }
+    const user = new User({ ...req.body, ...temp_workSpace });
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    const msg = "REGISTRED SUCESSFULLY";
+    //res.status(201).send(msg);
+    res.status(201).send({ msg, user, token });
   } catch (e) {
     res.status(400).send("Email Alreday Exists");
     console.log(e);

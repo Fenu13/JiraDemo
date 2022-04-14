@@ -4,12 +4,35 @@ const Workspace = require("../models/workspace");
 const auth = require("../middleware/auth");
 const User = require("../models/user");
 router.post("/addworkspace", auth, async (req, res) => {
-  const workspaces = new Workspace(req.body);
-  try {
-    console.log("Reqq==", req.body);
-    await workspaces.save();
+  //const workspaces = new Workspace(req.body);
+  // try {
+  //   console.log("Reqq==", req.body);
+  //   await workspaces.save();
 
-    res.status(201).send(workspaces);
+  //   res.status(201).send(workspaces);
+  // } catch (e) {
+  //   res.status(400).send(e);
+  // }
+
+  try {
+    Workspace.findOne(
+      { register_no: req.body.register_no },
+      async (err, workspaces) => {
+        if (workspaces) {
+          return res.status(400).send("Register No Already Exists");
+        }
+        if (!err) {
+          const workspaceData = new Workspace(req.body);
+          await workspaceData.save();
+
+          const { name, description, register_no } = workspaceData;
+          //  const workspaceData = { name, description, register_no };
+          console.log("workspaceData==", workspaceData);
+          return res.status(201).send("Workspace Added Sucessfully");
+        } else {
+        }
+      }
+    );
   } catch (e) {
     res.status(400).send(e);
   }

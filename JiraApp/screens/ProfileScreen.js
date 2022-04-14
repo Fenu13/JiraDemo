@@ -19,18 +19,22 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import {useSelector} from 'react-redux';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../store/User/userAction';
 
 const ProfileScreen = ({navigation}) => {
   const userData = useSelector(state => state.userData.users);
+  console.log('USERDATA==', userData);
   const user = userData.user;
-  //console.log('User==', user);
-  const [data, setData] = React.useState({
+  console.log('User==', user);
+
+  const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
     email: userData?.user?.email ?? '',
     check_textInputChange: false,
@@ -39,6 +43,7 @@ const ProfileScreen = ({navigation}) => {
 
   const [fName, setfName] = useState(userData?.user?.name ?? '');
   const [email, setEmail] = useState(userData?.user?.email ?? '');
+  const [image, setImage] = useState(null);
 
   const updateProfile = async () => {
     const jsonValue = await AsyncStorage.getItem('userData');
@@ -64,7 +69,27 @@ const ProfileScreen = ({navigation}) => {
     }
   };
 
-  const [image, setImage] = useState(null);
+  useEffect(() => {
+    getUpdatedData();
+  }, []);
+
+  const getUpdatedData = async () => {
+    const jsonValue = await AsyncStorage.getItem('userData');
+    const userObj = JSON.parse(jsonValue);
+    const token = userObj.token;
+    console.log('TOKENN==', token);
+    try {
+      const res = await jira.get(`/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('RESPONES==', res);
+    } catch (err) {
+      console.log('ERROR', err);
+      throw err;
+    }
+  };
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({

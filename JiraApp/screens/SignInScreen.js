@@ -184,13 +184,7 @@ const SignInScreen = ({navigation}) => {
             style={styles.signIn}
             onPress={() => {
               if (data.email !== '' && data.password !== '') {
-                dispatch(getLogin(data.email, data.password)).then(
-                  async res => {
-                    if (res) {
-                      await AsyncStorage.setItem('userToken', res.user.token);
-                    }
-                  },
-                );
+                dispatch(getLogin(data.email, data.password));
               } else {
                 Alert.alert(
                   'Wrong Input',

@@ -36,9 +36,12 @@ const HomeScreen = ({navigation, data}) => {
   };
   useEffect(() => {
     // await AsyncStorage.setItem('userToken', userToken);
-    AsyncStorage.getItem('userToken').then(res => {
+
+    AsyncStorage.getItem('userData').then(res => {
       if (res) {
-        setToken(res);
+        const userObj = JSON.parse(res);
+        const token1 = userObj.token;
+        setToken(token1);
       }
     });
   }, []);

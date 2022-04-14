@@ -101,7 +101,6 @@ export function DrawerContent(props) {
           onPress={async () => {
             dispatch(setUserData(null));
             await AsyncStorage.removeItem('userData');
-            await AsyncStorage.removeItem('userToken');
           }}
         />
       </Drawer.Section>
