@@ -2,13 +2,15 @@ import {GET_WORKSPACE} from './workspaceAction';
 
 const initialState = {
   workspace: [],
+  workspaceUsers: [],
 };
 
 const workspaceReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_WORKSPACE:
       return {
-        workspaces: action.workspaces,
+        workspace: action.workspace,
+        workspaceUsers: action.usersData,
       };
   }
   return state;

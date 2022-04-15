@@ -25,7 +25,7 @@ router.post("/addworkspace", auth, async (req, res) => {
           const workspaceData = new Workspace(req.body);
           await workspaceData.save();
 
-          const { name, description, register_no } = workspaceData;
+          //const { name, description, register_no } = workspaceData;
           //  const workspaceData = { name, description, register_no };
           console.log("workspaceData==", workspaceData);
           return res.status(201).send("Workspace Added Sucessfully");
@@ -52,9 +52,9 @@ router.delete("/workspace/:id", auth, async (req, res) => {
     const workspaces = await Workspace.findByIdAndDelete(req.params.id);
 
     if (!workspaces) {
-      return res.status(404).send();
+      return res.status(404).send("No Data Found");
     }
-    res.send(workspaces);
+    res.send("Deleted Sucessfully");
   } catch (e) {
     res.status(500).send();
   }

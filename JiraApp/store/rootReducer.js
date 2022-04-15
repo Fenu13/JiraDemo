@@ -5,5 +5,5 @@ import workspaceReducer from './workspace/workspaceReducer';
 export const rootReducer = combineReducers({
   tasks: taskReducer,
   userData: loginReducer,
-  workspaces: workspaceReducer,
+  workspace: workspaceReducer,
 });

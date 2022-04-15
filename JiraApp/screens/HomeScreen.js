@@ -3,13 +3,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
   StyleSheet,
-  StatusBar,
-  Image,
-  Button,
   ScrollView,
-  ToastAndroid,
   FlatList,
   Modal,
 } from 'react-native';
@@ -20,6 +15,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import {jira} from '../axios/axios';
 import WorkIcon from 'react-native-vector-icons/Foundation';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as workspaceAction from '../store/workspace/workspaceAction';
+import UserAvatar from 'react-native-user-avatar';
 
 const HomeScreen = ({navigation, data}) => {
   const [openPopUP, setOpenPopUp] = useState(false);
@@ -27,6 +24,14 @@ const HomeScreen = ({navigation, data}) => {
   const [selectedValue, setSelectedValue] = useState(0);
   const [taskLane, setTaskLane] = useState(0);
   const [token, setToken] = useState(null);
+
+  const user = useSelector(state => state.workspace.workspaceUsers);
+  // const user_workspace = useSelector(state => state.userData.users.user.name);
+
+  // console.log('USERs==', user_workspace);
+  useEffect(() => {
+    dispatch(workspaceAction.getWorkspace());
+  }, []);
 
   // state.rootreducer.reducer
   const tasks = useSelector(state => state.tasks.tasks);
@@ -78,33 +83,34 @@ const HomeScreen = ({navigation, data}) => {
       })
       .catch(error => console.log(error));
   };
-
+  const focused = name => {
+    alert(name);
+  };
   return (
     <View style={{flex: 1}}>
       <View style={{height: 40}}>
-        <ScrollView
-          horizontal={true}
-          contentContainerStyle={{width: '100%', alignItems: 'center'}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingLeft: 50,
-              paddingTop: 5,
-            }}>
-            <TouchableOpacity
-              style={{
-                borderRadius: 360,
-                borderWidth: 1,
-                height: 30,
-                width: 30,
-                justifyContent: 'center',
-              }}
-              onPress={() => {}}>
-              <Text style={{alignSelf: 'center'}}>FC</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+        <View
+          style={{
+            paddingLeft: 50,
+            paddingTop: 5,
+          }}>
+          <FlatList
+            data={user}
+            horizontal={true}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+            contentContainerStyle={{}}
+            renderItem={({item, index}) => {
+              return (
+                <View style={{}}>
+                  <TouchableOpacity onPress={() => focused(item.name)}>
+                    <UserAvatar size={35} name={item.name} />
+                  </TouchableOpacity>
+                </View>
+              );
+            }}></FlatList>
+        </View>
       </View>
 
       <View style={{height: 40, marginBottom: 10}}>

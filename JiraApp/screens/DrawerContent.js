@@ -11,19 +11,26 @@ import {
   TouchableRipple,
   Switch,
 } from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PersonIcon from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import WorkIcon from 'react-native-vector-icons/Foundation';
-import {AuthContext} from '../components/context';
+
 import {setUserData} from '../store/User/userAction';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import UserAvatar from 'react-native-user-avatar';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export function DrawerContent(props) {
   const paperTheme = useTheme();
   const dispatch = useDispatch();
+
+  const user_name = useSelector(state => state.userData.users.user.name);
+  const user_email = useSelector(state => state.userData.users.user.email);
 
   return (
     <View style={{flex: 1}}>
@@ -31,13 +38,15 @@ export function DrawerContent(props) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              <Avatar.Image
-                source={require('../asserts/Logo.jpeg')}
-                size={50}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate('Profile');
+                }}>
+                <UserAvatar size={50} name={user_name} />
+              </TouchableOpacity>
               <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                <Title style={styles.title}>John Doe</Title>
-                <Caption style={styles.caption}>@j_doe</Caption>
+                <Title style={styles.title}>{user_name}</Title>
+                <Caption style={styles.caption}>{user_email}</Caption>
               </View>
             </View>
           </View>

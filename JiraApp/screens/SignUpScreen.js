@@ -16,9 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import {jira} from '../axios/axios';
-import * as action from '../axios/action';
-import DrawerContent from './DrawerContent';
-import MainTabScreen from './MainTabScreen';
+
 const SignUpScreen = ({navigation}) => {
   const [data, setData] = React.useState({
     username: '',
@@ -105,7 +103,7 @@ const SignUpScreen = ({navigation}) => {
         },
       )
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         navigation.navigate('MainScreen');
       })
       .catch(error => console.log(error));
@@ -203,7 +201,7 @@ const SignUpScreen = ({navigation}) => {
               onChangeText={val => handleConfirmPasswordChange(val)}
             />
             <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
-              {data.secureTextEntry ? (
+              {data.confirm_secureTextEntry ? (
                 <Feather name="eye-off" color="grey" size={20} />
               ) : (
                 <Feather name="eye" color="grey" size={20} />

@@ -1,20 +1,26 @@
 import {jira} from '../../axios/axios';
 export const GET_WORKSPACE = 'GETWORKSPACE';
 
-export const getWorkspace = (id, token) => {
-  console.log('ID=', id);
-  console.log('token=', token);
-  return async dispatch => {
+export const getWorkspace = () => {
+  return async (dispatch, getState) => {
+    const userToken = getState().userData.users.token;
+    const user_workspace = getState().userData.users.user.workspace_id;
+    // console.log('ID=', user_workspace);
+    // console.log('token=', userToken);
     try {
-      const response = await jira.get(`/getuserbyworkspace/${id}`, {
+      const response = await jira.get(`/getuserbyworkspace/${user_workspace}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
 
       const resData = response.data;
-
-      dispatch({type: GET_WORKSPACE, workspaces: resData});
+      // console.log('RESDATA==', resData.workspace);
+      dispatch({
+        type: GET_WORKSPACE,
+        usersData: resData.users,
+        workspace: resData.workspace,
+      });
     } catch (err) {
       console.log(err);
       throw err;

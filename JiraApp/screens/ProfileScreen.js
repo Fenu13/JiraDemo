@@ -30,9 +30,9 @@ import {setUserData} from '../store/User/userAction';
 
 const ProfileScreen = ({navigation}) => {
   const userData = useSelector(state => state.userData.users);
-  console.log('USERDATA==', userData);
+  //console.log('USERDATA==', userData);
   const user = userData.user;
-  console.log('User==', user);
+  //console.log('User==', user);
 
   const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
@@ -50,7 +50,7 @@ const ProfileScreen = ({navigation}) => {
     const userObj = JSON.parse(jsonValue);
     const user_id = userObj.user._id;
     const token = userObj.token;
-    console.log('Jdhfgdsf', data);
+    //('Jdhfgdsf', data);
     try {
       await jira
         .patch(`/user/me/${user_id}`, data, {
@@ -59,7 +59,7 @@ const ProfileScreen = ({navigation}) => {
           },
         })
         .then(res => {
-          console.log('RESSS', res);
+          // console.log('RESSS', res);
         });
       alert('Your Data Has Updated !');
       // const resData = response.data;
@@ -77,14 +77,14 @@ const ProfileScreen = ({navigation}) => {
     const jsonValue = await AsyncStorage.getItem('userData');
     const userObj = JSON.parse(jsonValue);
     const token = userObj.token;
-    console.log('TOKENN==', token);
+    //console.log('TOKENN==', token);
     try {
       const res = await jira.get(`/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('RESPONES==', res);
+      // console.log('RESPONES==', res);
     } catch (err) {
       console.log('ERROR', err);
       throw err;
@@ -98,7 +98,7 @@ const ProfileScreen = ({navigation}) => {
       cropping: true,
       compressImageQuality: 0.7,
     }).then(image => {
-      console.log(image);
+      //console.log(image);
       setImage(image.path);
       this.bs.current.snapTo(1);
     });
@@ -111,7 +111,7 @@ const ProfileScreen = ({navigation}) => {
       cropping: true,
       compressImageQuality: 0.7,
     }).then(image => {
-      console.log(image);
+      //console.log(image);
       setImage(image.path);
       this.bs.current.snapTo(1);
     });
@@ -153,7 +153,7 @@ const ProfileScreen = ({navigation}) => {
   fall = new Animated.Value(1);
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#009387" barStyle="light-content" />
+      <StatusBar backgroundColor="#009387" />
       <BottomSheet
         ref={this.bs}
         snapPoints={[500, 0]} //How much it will open from bottom {x=0,y=1}

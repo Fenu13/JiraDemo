@@ -134,3 +134,50 @@ renderItem={
 //   setName('Done');
 //   setPerson({name:'Deep', age :19})
 // }
+
+
+
+
+//WORKSPACE SCREEN
+
+
+const [token, setToken] = useState(null);
+const [axiosData, setAxiosData] = useState(null);
+
+useEffect(() => {
+  // await AsyncStorage.setItem('userToken', userToken);
+
+  AsyncStorage.getItem('userData').then(res => {
+    if (res) {
+      const userObj = JSON.parse(res);
+      const token1 = userObj.token;
+      console.log('TOKEN==', token1);
+      setToken(token1);
+    }
+  });
+}, []);
+
+const getworkspaceData = async id => {
+  this.setState({
+    loading: true,
+  });
+  jira
+    .get(`/getuserbyworkspace/${id}`, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => {
+      console.log('getting data from axios', response.data);
+      setTimeout(() => {
+        this.setState({
+          loading: false,
+          axiosData: response.data,
+        });
+      }, 2000);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};

@@ -9,6 +9,7 @@ import RootStackScreen from './RootStackScreen';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {setUserData} from '../store/User/userAction';
+import {color} from 'react-native-reanimated';
 const Drawer = createDrawerNavigator();
 
 const NavigationScreen = () => {
