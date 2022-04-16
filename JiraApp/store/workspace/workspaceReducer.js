@@ -9,6 +9,7 @@ const workspaceReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_WORKSPACE:
       return {
+        ...state,
         workspace: action.workspace,
         workspaceUsers: action.usersData,
       };

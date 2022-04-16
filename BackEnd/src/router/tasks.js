@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 router.post("/newtasks", auth, async (req, res) => {
   const createdby = req?.user?.id;
-  // console.log("Created ==", req.body);
+  console.log("Created ==", req.body);
   const bodydata = req.body;
   bodydata.created_by = createdby;
   // console.log("body==", bodydata);
@@ -37,6 +37,7 @@ router.get("/getSelectTask/:status", auth, async (req, res) => {
     if (!tasks) {
       return res.status(404).send();
     }
+
     res.send(tasks);
   } catch (e) {
     res.status(500).send();
@@ -65,4 +66,5 @@ router.patch("/updateTask/:id", auth, async (req, res) => {
     res.status(400).send(e);
   }
 });
+
 module.exports = router;

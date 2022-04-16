@@ -24,11 +24,13 @@ const loginReducer = (prevState = initalLoginState, action) => {
 
     case 'LOGOUT':
       return {
+        ...prevState,
         initalLoginState,
       };
 
     case 'GET_USER':
       return {
+        ...prevState,
         users: action.user,
       };
     default:

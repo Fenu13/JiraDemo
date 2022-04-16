@@ -10,6 +10,7 @@ import HomeScreen from './HomeScreen';
 import ProfileScreen from './ProfileScreen';
 import WorkspaceScreen from './WorkspaceScreen';
 import MoreScreen from './MoreScreen';
+import AddNewTask from './AddNewTask';
 
 const HomeStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();

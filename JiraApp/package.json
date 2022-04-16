@@ -26,6 +26,7 @@
     "nodemailer": "^6.7.3",
     "react": "17.0.2",
     "react-native": "0.67.3",
+    "react-native-action-button": "^2.8.5",
     "react-native-animatable": "^1.3.3",
     "react-native-animating-bottom-tab-bar": "^1.0.6-4",
     "react-native-elements": "^3.4.2",

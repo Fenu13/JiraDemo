@@ -51,7 +51,7 @@ export function DrawerContent(props) {
             </View>
           </View>
 
-          <Drawer.Section style={styles.drawerSection}>
+          {/* <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
                 <Icon name="home-outline" color={color} size={size} />
@@ -88,7 +88,7 @@ export function DrawerContent(props) {
                 props.navigation.navigate('More');
               }}
             />
-          </Drawer.Section>
+          </Drawer.Section> */}
           {/* <Drawer.Section title="Preferences">
                         <TouchableRipple onPress={() => {toggleTheme()}}>
                             <View style={styles.preference}>

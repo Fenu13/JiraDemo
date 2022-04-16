@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   Modal,
+  Alert,
 } from 'react-native';
 
 import {getTask} from '../store/Task/taskAction';
@@ -17,8 +18,11 @@ import WorkIcon from 'react-native-vector-icons/Foundation';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as workspaceAction from '../store/workspace/workspaceAction';
 import UserAvatar from 'react-native-user-avatar';
+import * as taskAction from '../store/Task/taskAction';
+import ActionButton from 'react-native-action-button';
+import AddNewTask from './AddNewTask';
 
-const HomeScreen = ({navigation, data}) => {
+const HomeScreen = props => {
   const [openPopUP, setOpenPopUp] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [selectedValue, setSelectedValue] = useState(0);
@@ -26,22 +30,25 @@ const HomeScreen = ({navigation, data}) => {
   const [token, setToken] = useState(null);
 
   const user = useSelector(state => state.workspace.workspaceUsers);
+  const reporter_name = useSelector(state => state.tasks?.reporter);
+  const assign_to = useSelector(state => state.tasks?.assigned);
+  // console.log('USERs123==', reporter_name);
   // const user_workspace = useSelector(state => state.userData.users.user.name);
 
-  // console.log('USERs==', user_workspace);
   useEffect(() => {
     dispatch(workspaceAction.getWorkspace());
   }, []);
 
   // state.rootreducer.reducer
-  const tasks = useSelector(state => state.tasks.tasks);
+  const tasks = useSelector(state => state.tasks.task);
+  //console.log('TASKS==', tasks);
   const click = item => {
-    //  console.log(item);
     setActiveItem(item);
+    dispatch(taskAction.getuserbyreport(item.reporter));
+    dispatch(taskAction.getassigneduser(item.assign_to));
   };
-  useEffect(() => {
-    // await AsyncStorage.setItem('userToken', userToken);
 
+  useEffect(() => {
     AsyncStorage.getItem('userData').then(res => {
       if (res) {
         const userObj = JSON.parse(res);
@@ -91,7 +98,7 @@ const HomeScreen = ({navigation, data}) => {
       <View style={{height: 40}}>
         <View
           style={{
-            paddingLeft: 50,
+            paddingLeft: 20,
             paddingTop: 5,
           }}>
           <FlatList
@@ -103,7 +110,7 @@ const HomeScreen = ({navigation, data}) => {
             contentContainerStyle={{}}
             renderItem={({item, index}) => {
               return (
-                <View style={{}}>
+                <View style={{margin: 2, paddingBottom: 10}}>
                   <TouchableOpacity onPress={() => focused(item.name)}>
                     <UserAvatar size={35} name={item.name} />
                   </TouchableOpacity>
@@ -180,6 +187,7 @@ const HomeScreen = ({navigation, data}) => {
           );
         }}
       />
+      <View></View>
       <Modal
         animationType="slide"
         visible={openPopUP}
@@ -213,9 +221,14 @@ const HomeScreen = ({navigation, data}) => {
               <Text style={{fontWeight: 'bold'}}>Close</Text>
             </TouchableOpacity>
             <Text style={{paddingTop: 5}}>Title : {activeItem?.title}</Text>
+            <Text style={{paddingTop: 5}}>
+              Reported By :{reporter_name?.name}
+            </Text>
+            <Text style={{paddingTop: 5}}>Assigned to :{assign_to?.name}</Text>
             <Text style={{paddingTop: 5, paddingBottom: 10}}>
               Desciption : {activeItem?.description}
             </Text>
+
             <View style={{paddingBottom: 5, justifyContent: 'center'}}>
               <Text>Select Task :</Text>
               <RNPickerSelect
@@ -243,6 +256,10 @@ const HomeScreen = ({navigation, data}) => {
           </View>
         </View>
       </Modal>
+      <ActionButton
+        buttonColor="rgba(231,76,60,1)"
+        onPress={() => props.navigation.navigate('AddNewTask')}
+      />
     </View>
   );
 };

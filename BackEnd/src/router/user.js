@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const multer = require("multer");
 const sharp = require("sharp");
 const Workspace = require("../models/workspace");
-
+const Task = require("../models/tasks");
 router.post("/users", async (req, res) => {
   // console.log(req);
 
@@ -94,11 +94,11 @@ router.get("/users/me", auth, async (req, res) => {
 router.patch("/user/me/:id", auth, async (req, res) => {
   const id = req.params.id;
 
-  console.log("ID===", id);
+  //console.log("ID===", id);
 
   let updatedUser = {};
 
-  console.log("Name==", req.body);
+  // console.log("Name==", req.body);
   User.findByIdAndUpdate(id, req.body, function (err, docs) {
     if (err) {
       console.log(err);
@@ -191,23 +191,39 @@ router.get("/users/:id/avatar", async (req, res) => {
 
 router.get("/getuserbyworkspace/:id", auth, async (req, res) => {
   const _id = req.params.id;
-  console.log("IIDD==", _id);
+  //console.log("IIDD==", _id);
 
   try {
     const workspace = await Workspace.findById(_id);
-    console.log("WORKSPACE===", workspace);
+    //console.log("WORKSPACE===", workspace);
     if (!workspace) {
       return res.status(404).send();
     }
     const users = await User.find({ workspace_id: _id });
     // const response = { ...workspace._doc, users };
-    console.log("USER==", users);
+    //console.log("USER==", users);
     //console.log("RESSS==", response);
     res.send({ workspace: workspace, users });
+  } catch (e) {
+    // console.log("Error===", e);
+    res.status(500).send();
+  }
+});
+
+router.get("/getuserbyid/:id", auth, async (req, res) => {
+  const _id = req.params.id;
+  // console.log("IIDD==", _id);
+
+  try {
+    const user = await User.findById(_id);
+    // console.log("User===", user.name);
+    if (!user) {
+      return res.status(404).send();
+    }
+    res.send(user);
   } catch (e) {
     console.log("Error===", e);
     res.status(500).send();
   }
 });
-
 module.exports = router;
