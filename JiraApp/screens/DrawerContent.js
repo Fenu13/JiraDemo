@@ -38,10 +38,7 @@ export function DrawerContent(props) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              <TouchableOpacity
-                onPress={() => {
-                  props.navigation.navigate('Profile');
-                }}>
+              <TouchableOpacity>
                 <UserAvatar size={50} name={user_name} />
               </TouchableOpacity>
               <View style={{marginLeft: 15, flexDirection: 'column'}}>

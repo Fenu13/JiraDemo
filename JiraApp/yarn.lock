@@ -5939,6 +5939,11 @@ react-native-codegen@^0.0.8:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-element-dropdown@^1.8.8:
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/react-native-element-dropdown/-/react-native-element-dropdown-1.8.8.tgz#0140d42b5257164733e59fa40b59d40af4d264fd"
+  integrity sha512-ZrGQhFOlhh6Y15kraNOftTScQFWCfgz+Toq7DoGyX58YUlFeY7q95Z+w9W82XAr0LrO/VIrLBvgnYqTkGYpr/A==
+
 react-native-elements@^3.4.2:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.4.2.tgz#66602be9c5e0e0a2a831913adec80ff6518d1ee2"

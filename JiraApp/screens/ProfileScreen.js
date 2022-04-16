@@ -250,7 +250,6 @@ const ProfileScreen = ({navigation}) => {
               </Animatable.View>
             ) : null}
           </View>
-
           <Animatable.View style={styles.footer} animation="fadeInUpBig">
             <View style={styles.button}>
               <TouchableOpacity onPress={() => updateProfile()}>

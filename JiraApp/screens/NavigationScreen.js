@@ -10,6 +10,9 @@ import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {setUserData} from '../store/User/userAction';
 import {color} from 'react-native-reanimated';
+import AddNewTask from './AddNewTask';
+import AdminPage from './AdminPage';
+import LoginPage from './LoginPage';
 const Drawer = createDrawerNavigator();
 
 const NavigationScreen = () => {
@@ -27,10 +30,10 @@ const NavigationScreen = () => {
     <NavigationContainer>
       {users !== null ? (
         <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-          <Drawer.Screen name="Jira Software" component={MainTabScreen} />
+          <Drawer.Screen name="Jira Software" component={AdminPage} />
         </Drawer.Navigator>
       ) : (
-        <RootStackScreen />
+        <LoginPage />
       )}
     </NavigationContainer>
   );

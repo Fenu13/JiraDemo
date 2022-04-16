@@ -16,9 +16,9 @@ const RootStackScreen = ({navigation}) => (
     <RootStack.Screen name="SplashScreen" component={SplashScreen} />
     <RootStack.Screen name="SignInScreen" component={SignInScreen} />
     <RootStack.Screen name="SignUpScreen" component={SignUpScreen} />
-    {/* <RootStack.Screen name="MainTabScreen" component={MainTabScreen} />
+    <RootStack.Screen name="MainTabScreen" component={MainTabScreen} />
     <RootStack.Screen name="MainScreen" component={MainScreen} />
-    <RootStack.Screen name="AddNewTask" component={AddNewTask} /> */}
+    <RootStack.Screen name="AddNewTask" component={AddNewTask} />
   </RootStack.Navigator>
 );
 

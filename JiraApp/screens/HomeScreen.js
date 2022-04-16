@@ -7,7 +7,6 @@ import {
   ScrollView,
   FlatList,
   Modal,
-  Alert,
 } from 'react-native';
 
 import {getTask} from '../store/Task/taskAction';
