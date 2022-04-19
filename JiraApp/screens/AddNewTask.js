@@ -66,6 +66,7 @@ const AddNewTask = ({navigation}) => {
     }
   };
   const token = useSelector(state => state.userData.users.token);
+
   const addData = () => {
     jira
       .post(

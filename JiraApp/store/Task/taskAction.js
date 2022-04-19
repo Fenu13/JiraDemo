@@ -26,7 +26,7 @@ export const getTask = (status, token) => {
 export const getuserbyreport = reporter_id => {
   return async (dispatch, getState) => {
     const userToken = getState().userData.users.token;
-
+    //  console.log('token=====', userToken);
     try {
       const response = await jira.get(`/getuserbyid/${reporter_id}`, {
         headers: {

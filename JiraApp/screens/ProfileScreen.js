@@ -30,10 +30,13 @@ import {setUserData} from '../store/User/userAction';
 
 const ProfileScreen = ({navigation}) => {
   const userData = useSelector(state => state.userData.users);
-  //console.log('USERDATA==', userData);
+
+  // console.log('USERDATA==', userData);
   const user = userData.user;
   //console.log('User==', user);
-
+  const user_id = useSelector(state => state.userData.users.user._id);
+  const token = useSelector(state => state.userData.users.token);
+  // console.log('ID&TOKEN==', user_id, token);
   const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
     email: userData?.user?.email ?? '',
@@ -44,13 +47,14 @@ const ProfileScreen = ({navigation}) => {
   const [fName, setfName] = useState(userData?.user?.name ?? '');
   const [email, setEmail] = useState(userData?.user?.email ?? '');
   const [image, setImage] = useState(null);
-
+  const dispatch = useDispatch();
   const updateProfile = async () => {
-    const jsonValue = await AsyncStorage.getItem('userData');
-    const userObj = JSON.parse(jsonValue);
-    const user_id = userObj.user._id;
-    const token = userObj.token;
+    // const jsonValue = await AsyncStorage.getItem('userData');
+    // const userObj = JSON.parse(jsonValue);
+    // const user_id = userObj.user._id;
+    // const token = userObj.token;
     //('Jdhfgdsf', data);
+
     try {
       await jira
         .patch(`/user/me/${user_id}`, data, {
@@ -59,9 +63,16 @@ const ProfileScreen = ({navigation}) => {
           },
         })
         .then(res => {
-          // console.log('RESSS', res);
+          // console.log('RES==', res.data);
+          const storageData = {
+            ...res.data,
+            token: token,
+          };
+          AsyncStorage.setItem('userData', JSON.stringify(storageData));
+          dispatch(setUserData(storageData));
+          alert('Your Data Has Updated !');
         });
-      alert('Your Data Has Updated !');
+
       // const resData = response.data;
     } catch (err) {
       console.log('ERROR', err);

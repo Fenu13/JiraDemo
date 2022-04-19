@@ -17,6 +17,7 @@ const Drawer = createDrawerNavigator();
 
 const NavigationScreen = () => {
   const users = useSelector(state => state.userData.users);
+  //  console.log('USERSSSS===', users);
   const dispatch = useDispatch();
   useEffect(() => {
     AsyncStorage.getItem('userData').then(res => {

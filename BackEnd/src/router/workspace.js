@@ -27,7 +27,7 @@ router.post("/addworkspace", auth, async (req, res) => {
 
           //const { name, description, register_no } = workspaceData;
           //  const workspaceData = { name, description, register_no };
-          console.log("workspaceData==", workspaceData);
+          // console.log("workspaceData==", workspaceData);
           return res.status(201).send("Workspace Added Sucessfully");
         } else {
         }

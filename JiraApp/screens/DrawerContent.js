@@ -15,23 +15,19 @@ import {useSelector} from 'react-redux';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import PersonIcon from 'react-native-vector-icons/Ionicons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import WorkIcon from 'react-native-vector-icons/Foundation';
 
 import {setUserData} from '../store/User/userAction';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import UserAvatar from 'react-native-user-avatar';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
 export function DrawerContent(props) {
   const paperTheme = useTheme();
   const dispatch = useDispatch();
 
-  const user_name = useSelector(state => state.userData.users.user.name);
-  const user_email = useSelector(state => state.userData.users.user.email);
-
+  const user_name = useSelector(state => state?.userData?.users?.user?.name);
+  const user_email = useSelector(state => state?.userData?.users?.user?.email);
+  //console.log('USERDATA==', user_name);
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>

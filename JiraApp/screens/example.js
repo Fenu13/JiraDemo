@@ -222,3 +222,13 @@ const getworkspaceData = async id => {
 //     }
 //   };
 // };
+
+
+
+
+then(res => {
+  console.log('RES==', res.data.users.name);
+  AsyncStorage.setItem('userData', JSON.stringify(res.data.users.name));
+
+  alert('Your Data Has Updated !');
+});

@@ -6,7 +6,7 @@ export const getWorkspace = () => {
     const userToken = getState().userData.users.token;
     const user_workspace = getState().userData.users.user.workspace_id;
 
-    //console.log('ID=', user_workspace);
+    // console.log('ID=', user_workspace);
     // console.log('token=', userToken);
     try {
       const response = await jira.get(`/getuserbyworkspace/${user_workspace}`, {
@@ -14,9 +14,8 @@ export const getWorkspace = () => {
           Authorization: `Bearer ${userToken}`,
         },
       });
-
       const resData = response.data;
-      // console.log('RESDATA==', resData.workspace);
+      // console.log('RESDATA==', resData);
       dispatch({
         type: GET_WORKSPACE,
         usersData: resData.users,

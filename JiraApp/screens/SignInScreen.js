@@ -23,8 +23,8 @@ import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 const SignInScreen = ({navigation}) => {
   const [data, setData] = React.useState({
-    email: '',
-    password: '',
+    email: 'f@gmail.com',
+    password: '123456789',
     check_textInputChange: false,
     check_textInputChanged: false,
     secureTextEntry: true,
@@ -124,6 +124,7 @@ const SignInScreen = ({navigation}) => {
             placeholder="Your Email"
             style={styles.textInput}
             autoCapitalize="none"
+            value={data.email}
             onChangeText={val => textInputChanged(val)}
             onEndEditing={e => handleValidUser(e.nativeEvent.text)}
           />
@@ -154,6 +155,7 @@ const SignInScreen = ({navigation}) => {
           <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
             placeholder="Your Password"
+            value={data.password}
             secureTextEntry={data.secureTextEntry ? true : false}
             style={styles.textInput}
             autoCapitalize="none"

@@ -6,12 +6,13 @@ const multer = require("multer");
 const sharp = require("sharp");
 const Workspace = require("../models/workspace");
 const Task = require("../models/tasks");
+
 router.post("/users", async (req, res) => {
   // console.log(req);
 
   try {
     const workspace = await Workspace.find({}).sort();
-    console.log("Works==", workspace);
+    // console.log("Works==", workspace);
     let temp_workSpace = {};
     if (workspace.length !== 0) {
       const min_work = parseInt(workspace[0].register_no);
@@ -37,6 +38,7 @@ router.post("/users", async (req, res) => {
 });
 
 router.post("/users/login", async (req, res) => {
+  // console.log("reqqq=", req.body);
   try {
     const user = await User.findByCredentials(
       req.body.email,
@@ -66,31 +68,6 @@ router.get("/users/me", auth, async (req, res) => {
   res.send(req.user);
 });
 
-// router.patch("/user/me/:id", auth, async (req, res) => {
-//   const updates = Object.keys(req.body);
-//   const allowUpdates = ["name", "email"];
-//   const isValidOperation = updates.every((update) =>
-//     allowUpdates.includes(update)
-//   );
-
-//   if (!isValidOperation) {
-//     return res.status(400).send({ error: "Invalid Updates !" });
-//   }
-
-//   try {
-//     const user = await User.findById(req.params.id);
-//     console.log("USER==", user);
-//     updates.forEach((update) => (user[update] = req.body[update]));
-//     await user.save();
-//     if (!user) {
-//       return res.status(404).send();
-//     }
-//     res.send(user);
-//   } catch (e) {
-//     res.status(400).send(e);
-//   }
-// });
-
 router.patch("/user/me/:id", auth, async (req, res) => {
   const id = req.params.id;
 
@@ -106,31 +83,16 @@ router.patch("/user/me/:id", auth, async (req, res) => {
     } else {
       updatedUser = docs;
       // req.send({ users: docs });
-      // res.status(200).send({ users: docs });
+      User.findById(id, function (err, docs) {
+        if (docs) {
+          console.log("Updated User : ", docs);
+          res.status(200).send({ user: docs });
+        } else {
+          res.status(400).send({ error: "something wrong" });
+        }
+      });
     }
   });
-  User.findById(id, function (err, docs) {
-    if (docs) {
-      console.log("Updated User : ", docs);
-      res.status(200).send({ users: docs });
-    } else {
-      res.status(400).send({ error: "something wrong" });
-    }
-  });
-  // if (updatedUser !== {}) {
-  //   res.status(200).send({ users: updatedUser });
-  // }
-  // User.findByIdAndUpdate(id, req.body, function (err, updatedData) {
-  //   if (err) {
-  //     console.log(err);
-  //     res.send("Error updating");
-  //   } else {
-  //     console.log(updatedData);
-  //     res.json(updatedData);
-
-  //     //res.redirect or res.send whatever you want to do
-  //   }
-  // });
 });
 
 const upload = multer({
@@ -191,18 +153,18 @@ router.get("/users/:id/avatar", async (req, res) => {
 
 router.get("/getuserbyworkspace/:id", auth, async (req, res) => {
   const _id = req.params.id;
-  //console.log("IIDD==", _id);
+  // console.log("IIDD==", _id);
 
   try {
     const workspace = await Workspace.findById(_id);
-    //console.log("WORKSPACE===", workspace);
+    // console.log("WORKSPACE===", workspace);
     if (!workspace) {
       return res.status(404).send();
     }
     const users = await User.find({ workspace_id: _id });
-    // const response = { ...workspace._doc, users };
-    //console.log("USER==", users);
-    //console.log("RESSS==", response);
+    const response = { ...workspace._doc, users };
+    // console.log("USER==", users);
+    // console.log("RESSS==", response);
     res.send({ workspace: workspace, users });
   } catch (e) {
     // console.log("Error===", e);
