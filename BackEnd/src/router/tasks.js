@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 router.post("/newtasks", auth, async (req, res) => {
   const createdby = req?.user?.id;
-  console.log("Created ==", req.body);
+  // console.log("Created ==", req.body);
   const bodydata = req.body;
   bodydata.created_by = createdby;
   // console.log("body==", bodydata);
@@ -79,4 +79,19 @@ router.delete("/deletetask/:id", auth, async (req, res) => {
     res.status(500).send();
   }
 });
+
+router.get("/taskbyid/:id", auth, async (req, res) => {
+  // console.log("ID===", _id);
+  try {
+    const tasks = await Task.findById(req.params.id);
+
+    if (!tasks) {
+      return res.status(404).send();
+    }
+    res.send(tasks);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
 module.exports = router;

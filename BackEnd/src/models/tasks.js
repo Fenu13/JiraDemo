@@ -43,6 +43,16 @@ const tasksSchema = new mongoose.Schema(
     status: {
       type: Number,
     },
+
+    comments: [
+      {
+        text: String,
+        postedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
   },
   {
     timestamps: true,

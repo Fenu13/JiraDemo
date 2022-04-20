@@ -2,8 +2,10 @@ import {stat} from 'fs';
 import {GET_TASK} from './taskAction';
 import {GET_REPORTER} from './taskAction';
 import {GET_ASSIGNED_USER} from './taskAction';
+import {GET_TASK_ID} from './taskAction';
 const initialState = {
   task: [],
+  task_id: [],
   reporter: [],
   assigned: [],
 };
@@ -14,6 +16,11 @@ const taskReducer = (state = initialState, action) => {
       return {
         ...state,
         task: action.tasks,
+      };
+    case GET_TASK_ID:
+      return {
+        ...state,
+        task_id: action.tasks,
       };
     case GET_REPORTER:
       return {

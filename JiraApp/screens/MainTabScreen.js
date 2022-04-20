@@ -16,13 +16,17 @@ const HomeStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabScreen = ({navigation}) => (
-  <Tab.Navigator initialRouteName="Home" activeColor="#fff">
+  <Tab.Navigator
+    initialRouteName="Home"
+    activeColor="#fff"
+    barStyle={{backgroundColor: '#009387'}}>
     <Tab.Screen
       name="Home"
       component={HomeStackScreen}
       options={{
         tabBarLabel: 'Home',
-        tabBarColor: '#009387',
+        //tabBarColor: '#009387',
+
         tabBarIcon: ({color}) => (
           <Icon name="ios-home" color={color} size={26} />
         ),
@@ -33,7 +37,8 @@ const MainTabScreen = ({navigation}) => (
       component={ProfileStackScreen}
       options={{
         tabBarLabel: 'Profile',
-        tabBarColor: '#009387',
+        //tabBarColor: '#009387',
+
         tabBarIcon: ({color}) => (
           <Icon name="person-circle" color={color} size={26} />
         ),
@@ -44,23 +49,23 @@ const MainTabScreen = ({navigation}) => (
       component={WorkSpaceStackScreen}
       options={{
         tabBarLabel: 'WorkSpace',
-        tabBarColor: '#009387',
+        //    tabBarColor: '#009387',
         tabBarIcon: ({color}) => (
           <WorkIcon name="social-myspace" color={color} size={26} />
         ),
       }}
     />
-    <Tab.Screen
+    {/* <Tab.Screen
       name="More"
       component={MoreStackScreen}
       options={{
         tabBarLabel: 'More',
-        tabBarColor: '#009387',
+       // tabBarColor: '#009387',
         tabBarIcon: ({color}) => (
           <FeatherIcon name="more-horizontal" color={color} size={26} />
         ),
       }}
-    />
+    /> */}
   </Tab.Navigator>
 );
 
@@ -70,7 +75,7 @@ const HomeStackScreen = ({navigation}) => (
   <HomeStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: '#009387',
+        //   backgroundColor: '#009387',
       },
       headerTintColor: '#fff',
       headerShown: false,
@@ -86,7 +91,7 @@ const ProfileStackScreen = ({navigation}) => (
   <HomeStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: '#009387',
+        //    backgroundColor: '#009387',
       },
       headerTintColor: 'red',
       headerShown: false,
@@ -102,7 +107,7 @@ const WorkSpaceStackScreen = ({navigation}) => (
   <HomeStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: '#009387',
+        //     backgroundColor: '#009387',
       },
       headerTintColor: '#fff',
       headerShown: false,
@@ -114,18 +119,18 @@ const WorkSpaceStackScreen = ({navigation}) => (
   </HomeStack.Navigator>
 );
 
-const MoreStackScreen = ({navigation}) => (
-  <HomeStack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: '#009387',
-      },
-      headerTintColor: '#fff',
-      headerShown: false,
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-    }}>
-    <HomeStack.Screen name="More" component={MoreScreen} />
-  </HomeStack.Navigator>
-);
+// const MoreStackScreen = ({navigation}) => (
+//   <HomeStack.Navigator
+//     screenOptions={{
+//       headerStyle: {
+//         backgroundColor: '#009387',
+//       },
+//       headerTintColor: '#fff',
+//       headerShown: false,
+//       headerTitleStyle: {
+//         fontWeight: 'bold',
+//       },
+//     }}>
+//     <HomeStack.Screen name="More" component={MoreScreen} />
+//   </HomeStack.Navigator>
+// );
