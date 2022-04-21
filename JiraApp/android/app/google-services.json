@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "324277121174",
+    "project_id": "jira-af044",
+    "storage_bucket": "jira-af044.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324277121174:android:574f9cd5603ef305a652b7",
+        "android_client_info": {
+          "package_name": "com.navigation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324277121174-h8s60865smk26ockum8dmaghd68vcmi1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0yCG8macp4kCNnppOuvhS4rQFjYs8aRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324277121174-h8s60865smk26ockum8dmaghd68vcmi1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "324277121174-l7n9j24ovt6f0m65rllb36mvlqqn9cdj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.Navigation"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

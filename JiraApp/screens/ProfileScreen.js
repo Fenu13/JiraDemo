@@ -27,6 +27,7 @@ import Animated from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 import {useDispatch} from 'react-redux';
 import {setUserData} from '../store/User/userAction';
+import storage from '@react-native-firebase/storage';
 
 const ProfileScreen = ({navigation}) => {
   const userData = useSelector(state => state.userData.users);
@@ -43,7 +44,9 @@ const ProfileScreen = ({navigation}) => {
     check_textInputChange: false,
     secureTextEntry: true,
   });
-
+  const [profile, setProfile] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
   const [fName, setfName] = useState(userData?.user?.name ?? '');
   const [email, setEmail] = useState(userData?.user?.email ?? '');
   const [image, setImage] = useState(null);
@@ -102,6 +105,48 @@ const ProfileScreen = ({navigation}) => {
     }
   };
 
+  // Image Upload
+  const imageUpload = async imagePath => {
+    setProfile(imagePath);
+    // set image name
+    const imageName = imagePath.substring(imagePath.lastIndexOf('/') + 1);
+    const ext = imageName.split('.').pop();
+    const name = imageName.split('.')[0];
+    const newImageName = name + Date.now() + '.' + ext;
+    const folderPath = `images/${newImageName}`;
+
+    // console.log(folderPath);
+
+    //FileName
+    const uploadUri =
+      Platform.OS === 'ios' ? imagePath.replace('file://', '') : imagePath;
+
+    this.bs.current.snapTo(1);
+
+    setUploading(true);
+    setTransferred(0);
+
+    try {
+      const imageReference = storage().ref(folderPath);
+      const task = imageReference.putFile(uploadUri);
+      // set progress state
+      task.on('state_changed', snapshot => {
+        setTransferred(
+          Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
+        );
+      });
+
+      task.then(async () => {
+        const url = await storage().ref(folderPath).getDownloadURL();
+        // await dispatch(userAction.updateProfile({companyLogo: url}));
+        console.log('URL=', url);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    setUploading(false);
+  };
+
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
       compressImageMaxWidth: 300,
@@ -111,7 +156,9 @@ const ProfileScreen = ({navigation}) => {
     }).then(image => {
       //console.log(image);
       setImage(image.path);
-      this.bs.current.snapTo(1);
+
+      imageUpload(image.path);
+      //   this.bs.current.snapTo(1);
     });
   };
 
@@ -124,7 +171,8 @@ const ProfileScreen = ({navigation}) => {
     }).then(image => {
       //console.log(image);
       setImage(image.path);
-      this.bs.current.snapTo(1);
+      imageUpload(image.path);
+      // this.bs.current.snapTo(1);
     });
   };
 
