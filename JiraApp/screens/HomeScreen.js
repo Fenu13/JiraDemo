@@ -204,9 +204,6 @@ const HomeScreen = props => {
                   Comments : {item?.text}
                 </Text>
               </View>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{fontWeight: 'bold'}}>Name : {item.postedBy}</Text>
-              </View>
 
               <View style={{flexDirection: 'row'}}>
                 <MaterialIcons

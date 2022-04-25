@@ -23,8 +23,8 @@ import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 const SignInScreen = ({navigation}) => {
   const [data, setData] = React.useState({
-    email: 'f@gmail.com',
-    password: '123456789',
+    email: '',
+    password: '',
     check_textInputChange: false,
     check_textInputChanged: false,
     secureTextEntry: true,

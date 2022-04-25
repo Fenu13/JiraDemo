@@ -41,6 +41,7 @@ const ProfileScreen = ({navigation}) => {
   const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
     email: userData?.user?.email ?? '',
+    url: userData?.user?.url ?? '',
     check_textInputChange: false,
     secureTextEntry: true,
   });
@@ -158,7 +159,7 @@ const ProfileScreen = ({navigation}) => {
       setImage(image.path);
 
       imageUpload(image.path);
-      //   this.bs.current.snapTo(1);
+      this.bs.current.snapTo(1);
     });
   };
 
@@ -172,7 +173,7 @@ const ProfileScreen = ({navigation}) => {
       //console.log(image);
       setImage(image.path);
       imageUpload(image.path);
-      // this.bs.current.snapTo(1);
+      this.bs.current.snapTo(1);
     });
   };
 
