@@ -34,6 +34,7 @@ const HomeScreen = props => {
   // const [activeComment, setActiveComment] = useState(null);
   const [selectedValue, setSelectedValue] = useState(0);
   const [taskLane, setTaskLane] = useState(0);
+  const [color, setColor] = useState(true);
   const [token, setToken] = useState(null);
   const [comments, setComments] = useState(false);
   const [data, setData] = React.useState({
@@ -157,7 +158,7 @@ const HomeScreen = props => {
       )
       .then(response => {
         if (!data.comment) {
-          alert('Comment Cannot Be Blank');
+          console.warn('Comment Cannot Be Blank');
         } else {
           alert('Comment Added Please Save Once Comment Is Added');
         }
@@ -172,7 +173,7 @@ const HomeScreen = props => {
     });
     //  console.log('Comments=', comment);
     tasks_id.comments = comment;
-    alert('Comment Deleted Successfully');
+    console.warn('Comment Deleted Successfully');
     // tasks_id.save();
   };
 
@@ -536,8 +537,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#e0ffff',
     height: 30,
-
-    paddingHorizontal: 20,
+    paddingHorizontal: 13,
     marginHorizontal: 20,
     borderRadius: 25,
     justifyContent: 'center',

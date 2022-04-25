@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       },
     },
     avatar: {
-      type: Buffer,
+      type: String,
     },
     workspace_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -67,7 +67,7 @@ userSchema.methods.toJSON = function () {
 
   delete userObject.password;
   delete userObject.tokens;
-  delete userObject.avatar;
+
   return userObject;
 };
 

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-
+import Toast from 'react-native-toast-message';
 import {jira} from '../../axios/axios';
 export const GET_LOGIN = 'GET_LOGIN';
 export const LOGOUT = 'LOGOUT';
@@ -35,7 +35,8 @@ export const getLogin = (email, password) => {
 
       return dispatch(setUserData(resData));
     } catch (err) {
-      console.log(err);
+      console.warn('Invalid Credentials');
+      // console.log(err);
       throw err;
     }
   };

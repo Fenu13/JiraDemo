@@ -23,6 +23,7 @@ function LoginPage() {
       <Stack.Screen
         name="SignUpScreen"
         component={SignUpScreen}
+        headerMode={false}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

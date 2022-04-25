@@ -41,24 +41,19 @@ const ProfileScreen = ({navigation}) => {
   const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
     email: userData?.user?.email ?? '',
-    url: userData?.user?.url ?? '',
+    //url: userData?.user?.url ?? '',
     check_textInputChange: false,
     secureTextEntry: true,
   });
   const [profile, setProfile] = useState('');
+
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
   const [fName, setfName] = useState(userData?.user?.name ?? '');
   const [email, setEmail] = useState(userData?.user?.email ?? '');
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
-  const updateProfile = async () => {
-    // const jsonValue = await AsyncStorage.getItem('userData');
-    // const userObj = JSON.parse(jsonValue);
-    // const user_id = userObj.user._id;
-    // const token = userObj.token;
-    //('Jdhfgdsf', data);
-
+  const updateProfile = async url => {
     try {
       await jira
         .patch(`/user/me/${user_id}`, data, {
@@ -70,11 +65,12 @@ const ProfileScreen = ({navigation}) => {
           // console.log('RES==', res.data);
           const storageData = {
             ...res.data,
+            avatar: url,
             token: token,
           };
           AsyncStorage.setItem('userData', JSON.stringify(storageData));
           dispatch(setUserData(storageData));
-          alert('Your Data Has Updated !');
+          console.warn('Your Data Has Updated !');
         });
 
       // const resData = response.data;
@@ -139,7 +135,8 @@ const ProfileScreen = ({navigation}) => {
 
       task.then(async () => {
         const url = await storage().ref(folderPath).getDownloadURL();
-        // await dispatch(userAction.updateProfile({companyLogo: url}));
+
+        updateProfile(url);
         console.log('URL=', url);
       });
     } catch (e) {

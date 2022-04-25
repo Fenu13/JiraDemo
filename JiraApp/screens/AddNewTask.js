@@ -20,7 +20,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {jira} from '../axios/axios';
 import RNPickerSelect from 'react-native-picker-select';
 import {useSelector} from 'react-redux';
-
+import {KeyboardAvoidingView} from 'react-native';
 const AddNewTask = ({navigation}) => {
   const [selectedValue, setSelectedValue] = useState(0);
 
@@ -87,6 +87,7 @@ const AddNewTask = ({navigation}) => {
         },
       )
       .then(response => {
+        console.warn('Task Added Successfully');
         navigation.navigate('tabScreen');
       })
       .catch(error => console.log(error));
@@ -111,170 +112,178 @@ const AddNewTask = ({navigation}) => {
         <Text style={styles.text_header}>Add Task</Text>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.text_footer}>Title</Text>
-          <View style={styles.action}>
-            <FontAwesome name="tasks" color="#05375a" size={20} />
-            <TextInput
-              placeholder="Add Title"
-              style={styles.textInput}
-              autoCapitalize="none"
-              onChangeText={val => textInputChange(val)}
-            />
-            {data.check_textInputChange ? (
-              <Animatable.View animation="bounceIn">
-                <Feather name="check-circle" color="green" size={20} />
-              </Animatable.View>
-            ) : null}
-          </View>
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}>
-            Description
-          </Text>
-          <View style={styles.action}>
-            <MaterialIcons name="description" color="#05375a" size={20} />
-            <TextInput
-              placeholder="Your Description"
-              style={styles.textInput}
-              autoCapitalize="none"
-              onChangeText={val => textInputChanged(val)}
-            />
-            {data.check_textInputChanged ? (
-              <Animatable.View animation="bounceIn">
-                <Feather name="check-circle" color="green" size={20} />
-              </Animatable.View>
-            ) : null}
-          </View>
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}>
-            Reported By
-          </Text>
-          <View style={styles.action}>
-            <FontAwesome name="user" color="#05375a" size={20} />
-
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={user}
-              search
-              maxHeight={300}
-              labelField="name"
-              valueField="_id"
-              placeholder="Select item"
-              searchPlaceholder="Search..."
-              value={value}
-              onChange={item => {
-                setValue(item._id);
-              }}
-              renderItem={renderItem}
-            />
-          </View>
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}>
-            Assign To
-          </Text>
-          <View style={styles.action}>
-            <FontAwesome name="user" color="#05375a" size={20} />
-
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={user}
-              search
-              maxHeight={300}
-              labelField="name"
-              valueField="_id"
-              placeholder="Select item"
-              searchPlaceholder="Search..."
-              value={value1}
-              onChange={item => {
-                setValue1(item._id);
-              }}
-              renderItem={renderItem}
-            />
-          </View>
-
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                marginTop: 35,
-              },
-            ]}>
-            Status
-          </Text>
-
-          <View style={styles.action}>
-            <MaterialIcons name="work" color="#05375a" size={20} />
-
-            <View>
-              <RNPickerSelect
-                onValueChange={selectedValue => setSelectedValue(selectedValue)}
-                items={[
-                  {label: 'Todo', value: '0'},
-                  {label: 'Processing', value: '1'},
-                  {label: 'Done', value: '2'},
-                ]}
+        <KeyboardAvoidingView
+          style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
+          behavior="padding"
+          enabled
+          keyboardVerticalOffset={300}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Text style={styles.text_footer}>Title</Text>
+            <View style={styles.action}>
+              <FontAwesome name="tasks" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Add Title"
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={val => textInputChange(val)}
               />
+              {data.check_textInputChange ? (
+                <Animatable.View animation="bounceIn">
+                  <Feather name="check-circle" color="green" size={20} />
+                </Animatable.View>
+              ) : null}
             </View>
-          </View>
-
-          <View style={styles.button}>
-            <TouchableOpacity
-              style={styles.signIn}
-              onPress={() => {
-                addData();
-              }}>
-              <LinearGradient
-                colors={['#08d4c4', '#01ab9d']}
-                style={styles.signIn}>
-                <Text style={styles.textSign}>Submit Task</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
+            <Text
               style={[
-                styles.signIn,
+                styles.text_footer,
                 {
-                  borderColor: '#009387',
-                  borderWidth: 1,
-                  marginTop: 15,
+                  marginTop: 35,
                 },
               ]}>
-              <Text
+              Description
+            </Text>
+            <View style={styles.action}>
+              <MaterialIcons name="description" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Description"
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={val => textInputChanged(val)}
+              />
+              {data.check_textInputChanged ? (
+                <Animatable.View animation="bounceIn">
+                  <Feather name="check-circle" color="green" size={20} />
+                </Animatable.View>
+              ) : null}
+            </View>
+            <Text
+              style={[
+                styles.text_footer,
+                {
+                  marginTop: 35,
+                },
+              ]}>
+              Reported By
+            </Text>
+            <View style={styles.action}>
+              <FontAwesome name="user" color="#05375a" size={20} />
+
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={user}
+                search
+                maxHeight={300}
+                labelField="name"
+                valueField="_id"
+                placeholder="Select item"
+                searchPlaceholder="Search..."
+                value={value}
+                onChange={item => {
+                  setValue(item._id);
+                }}
+                renderItem={renderItem}
+              />
+            </View>
+            <Text
+              style={[
+                styles.text_footer,
+                {
+                  marginTop: 35,
+                },
+              ]}>
+              Assign To
+            </Text>
+            <View style={styles.action}>
+              <FontAwesome name="user" color="#05375a" size={20} />
+
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={user}
+                search
+                maxHeight={300}
+                labelField="name"
+                valueField="_id"
+                placeholder="Select item"
+                searchPlaceholder="Search..."
+                value={value1}
+                onChange={item => {
+                  setValue1(item._id);
+                }}
+                renderItem={renderItem}
+              />
+            </View>
+
+            <Text
+              style={[
+                styles.text_footer,
+                {
+                  marginTop: 35,
+                },
+              ]}>
+              Status
+            </Text>
+
+            <View style={styles.action}>
+              <MaterialIcons name="work" color="#05375a" size={20} />
+
+              <View>
+                <RNPickerSelect
+                  onValueChange={selectedValue =>
+                    setSelectedValue(selectedValue)
+                  }
+                  items={[
+                    {label: 'Todo', value: '0'},
+                    {label: 'Processing', value: '1'},
+                    {label: 'Done', value: '2'},
+                  ]}
+                />
+              </View>
+            </View>
+
+            <View style={styles.button}>
+              <TouchableOpacity
+                style={styles.signIn}
+                onPress={() => {
+                  addData();
+                }}>
+                <LinearGradient
+                  colors={['#08d4c4', '#01ab9d']}
+                  style={styles.signIn}>
+                  <Text style={styles.textSign}>Submit Task</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
                 style={[
-                  styles.textSign,
+                  styles.signIn,
                   {
-                    color: '#009387',
+                    borderColor: '#009387',
+                    borderWidth: 1,
+                    marginTop: 15,
                   },
                 ]}>
-                Back
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+                <Text
+                  style={[
+                    styles.textSign,
+                    {
+                      color: '#009387',
+                    },
+                  ]}>
+                  Back
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </Animatable.View>
     </View>
   );

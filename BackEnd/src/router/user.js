@@ -85,7 +85,7 @@ router.patch("/user/me/:id", auth, async (req, res) => {
       // req.send({ users: docs });
       User.findById(id, function (err, docs) {
         if (docs) {
-          console.log("Updated User : ", docs);
+          // console.log("Updated User : ", docs);
           res.status(200).send({ user: docs });
         } else {
           res.status(400).send({ error: "something wrong" });
