@@ -71,7 +71,7 @@ router.get("/users/me", auth, async (req, res) => {
 router.patch("/user/me/:id", auth, async (req, res) => {
   const id = req.params.id;
 
-  //console.log("ID===", id);
+  console.log("Updateee", req.body);
 
   let updatedUser = {};
 

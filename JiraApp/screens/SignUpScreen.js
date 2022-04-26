@@ -131,7 +131,7 @@ const SignUpScreen = ({navigation}) => {
           behavior="padding"
           enabled
           keyboardVerticalOffset={300}>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.text_footer}>Username</Text>
             <View style={styles.action}>
               <FontAwesome name="user-o" color="#05375a" size={20} />

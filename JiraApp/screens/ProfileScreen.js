@@ -41,9 +41,9 @@ const ProfileScreen = ({navigation}) => {
   const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
     email: userData?.user?.email ?? '',
-    //url: userData?.user?.url ?? '',
-    check_textInputChange: false,
-    secureTextEntry: true,
+    avatar: userData?.user?.url ?? '',
+    // check_textInputChange: false,
+    // secureTextEntry: true,
   });
   const [profile, setProfile] = useState('');
 
