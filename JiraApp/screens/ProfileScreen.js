@@ -247,23 +247,22 @@ const ProfileScreen = ({navigation}) => {
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="camera"
-                    size={35}
-                    color="#fff"
-                    style={{
-                      opacity: 0.7,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: '#fff',
-                      borderRadius: 10,
-                    }}
-                  />
-                </View>
+                  }}></View>
               </ImageBackground>
             </View>
+            <Icon
+              name="camera"
+              size={35}
+              color="#fff"
+              style={{
+                opacity: 0.7,
+                position: 'absolute',
+                left: 90,
+                top: 80,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
           </TouchableOpacity>
         </View>
       </Animated.View>
