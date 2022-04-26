@@ -68,33 +68,55 @@ router.get("/users/me", auth, async (req, res) => {
   res.send(req.user);
 });
 
+// router.patch("/user/me/:id", auth, async (req, res) => {
+//   const id = req.params.id;
+
+//   console.log("Updateee", req.body);
+
+//   let updatedUser = {};
+
+//   // console.log("Name==", req.body);
+//   User.findByIdAndUpdate(id, req.body, function (err, docs) {
+//     if (err) {
+//       console.log(err);
+//       // res.status(400).send({ error: "something wrong" });
+//     } else {
+//       updatedUser = docs;
+//       // req.send({ users: docs });
+//       User.findById(id, function (err, docs) {
+//         if (docs) {
+//           // console.log("Updated User : ", docs);
+//           res.status(200).send({ user: docs });
+//         } else {
+//           res.status(400).send({ error: "something wrong" });
+//         }
+//       });
+//     }
+//   });
+// });
+
 router.patch("/user/me/:id", auth, async (req, res) => {
-  const id = req.params.id;
+  const updates = Object.keys(req.body);
+  const allowUpdates = ["name", "email", "avatar"];
+  const isValidOperation = updates.every((update) =>
+    allowUpdates.includes(update)
+  );
 
-  console.log("Updateee", req.body);
-
-  let updatedUser = {};
-
-  // console.log("Name==", req.body);
-  User.findByIdAndUpdate(id, req.body, function (err, docs) {
-    if (err) {
-      console.log(err);
-      // res.status(400).send({ error: "something wrong" });
-    } else {
-      updatedUser = docs;
-      // req.send({ users: docs });
-      User.findById(id, function (err, docs) {
-        if (docs) {
-          // console.log("Updated User : ", docs);
-          res.status(200).send({ user: docs });
-        } else {
-          res.status(400).send({ error: "something wrong" });
-        }
-      });
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid Updates !" });
+  }
+  try {
+    const user = await User.findById(req.params.id);
+    updates.forEach((update) => (user[update] = req.body[update]));
+    await user.save();
+    if (!user) {
+      return res.status(404).send();
     }
-  });
+    res.send(user);
+  } catch (e) {
+    res.status(400).send(e);
+  }
 });
-
 const upload = multer({
   limits: {
     fileSize: 1000000,

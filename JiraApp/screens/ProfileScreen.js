@@ -30,13 +30,13 @@ import {setUserData} from '../store/User/userAction';
 import storage from '@react-native-firebase/storage';
 
 const ProfileScreen = ({navigation}) => {
-  const userData = useSelector(state => state.userData.users);
+  const userData = useSelector(state => state?.userData?.users);
 
-  // console.log('USERDATA==', userData);
-  const user = userData.user;
-  //console.log('User==', user);
-  const user_id = useSelector(state => state.userData.users.user._id);
-  const token = useSelector(state => state.userData.users.token);
+  //console.log('USERDATA==', userData);
+  const user = userData?.user;
+  // console.log('User==', user);
+  const user_id = useSelector(state => state?.userData?.users?.user?._id);
+  const token = useSelector(state => state?.userData?.users?.token);
   // console.log('ID&TOKEN==', user_id, token);
   const [data, setData] = useState({
     name: userData?.user?.name ?? '', // userData.user.name?userData.user.name:''
@@ -53,7 +53,7 @@ const ProfileScreen = ({navigation}) => {
   const [email, setEmail] = useState(userData?.user?.email ?? '');
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
-  const updateProfile = async url => {
+  const updateProfile = async () => {
     try {
       await jira
         .patch(`/user/me/${user_id}`, data, {
@@ -64,10 +64,10 @@ const ProfileScreen = ({navigation}) => {
         .then(res => {
           // console.log('RES==', res.data);
           const storageData = {
-            ...res.data,
-            avatar: url,
             token: token,
+            user: {...res.data},
           };
+          // console.log('Storage==', storageData);
           AsyncStorage.setItem('userData', JSON.stringify(storageData));
           dispatch(setUserData(storageData));
           console.warn('Your Data Has Updated !');
@@ -88,14 +88,16 @@ const ProfileScreen = ({navigation}) => {
     const jsonValue = await AsyncStorage.getItem('userData');
     const userObj = JSON.parse(jsonValue);
     const token = userObj.token;
-    //console.log('TOKENN==', token);
+    // console.log('TOKENN==', userObj);
     try {
       const res = await jira.get(`/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log('RESPONES==', res);
+      setData({name: res.data.name, email: res.data.email});
+      setImage(res.data.avatar);
+      // console.log('RESPONES==', res.data.avatar);
     } catch (err) {
       console.log('ERROR', err);
       throw err;
@@ -136,7 +138,7 @@ const ProfileScreen = ({navigation}) => {
       task.then(async () => {
         const url = await storage().ref(folderPath).getDownloadURL();
 
-        updateProfile(url);
+        setData({...data, avatar: url});
         console.log('URL=', url);
       });
     } catch (e) {

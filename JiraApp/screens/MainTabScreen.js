@@ -99,7 +99,7 @@ const ProfileStackScreen = ({navigation}) => (
         fontWeight: 'bold',
       },
     }}>
-    <HomeStack.Screen name="Profile" component={ProfileScreen} />
+    <HomeStack.Screen name="Profile1" component={ProfileScreen} />
   </HomeStack.Navigator>
 );
 
