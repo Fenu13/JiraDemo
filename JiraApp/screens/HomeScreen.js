@@ -34,12 +34,16 @@ const HomeScreen = props => {
   // const [activeComment, setActiveComment] = useState(null);
   const [selectedValue, setSelectedValue] = useState(0);
   const [taskLane, setTaskLane] = useState(0);
-  const [color, setColor] = useState(true);
+  const [todoActive, setTodoActive] = useState(true);
+  const [processActive, setProcessActive] = useState(false);
+  const [doneActive, setDoneActive] = useState(false);
   const [token, setToken] = useState(null);
   const [comments, setComments] = useState(false);
+  const [activeUser, setActiveUser] = useState([]);
+  const [filterTask, setFilterTask] = useState([]);
+
   const [data, setData] = React.useState({
     comment: '',
-
     check_textInputChange: false,
     secureTextEntry: true,
     confirm_secureTextEntry: true,
@@ -61,21 +65,22 @@ const HomeScreen = props => {
     }
   };
 
-  const user = useSelector(state => state.workspace.workspaceUsers);
+  const user = useSelector(state => state?.workspace?.workspaceUsers);
   // console.log('USER=', user);
-  const reporter_name = useSelector(state => state.tasks?.reporter);
+  const reporter_name = useSelector(state => state?.tasks?.reporter);
   // const tasks_comment = useSelector(state => state.tasks?.task);
 
   // console.log('TASKS DETAIL==', tasks_comment);
-  const assign_to = useSelector(state => state.tasks?.assigned);
+  const assign_to = useSelector(state => state?.tasks?.assigned);
 
-  // console.log('report==', assign_to._id);
+  //  console.log('Assigned==', assign_to_id);
+
   useEffect(() => {
     dispatch(workspaceAction.getWorkspace());
   }, []);
 
   // state.rootreducer.reducer
-  const tasks = useSelector(state => state.tasks.task);
+  const tasks = useSelector(state => state?.tasks?.task);
 
   // console.log('TASKS==', tasks);
   let task;
@@ -83,8 +88,8 @@ const HomeScreen = props => {
     //  console.log('Item', item.comments);
     // setActiveComment(item);
     setActiveItem(item);
-    dispatch(taskAction.getuserbyreport(item.reporter));
-    dispatch(taskAction.getassigneduser(item.assign_to));
+    dispatch(taskAction.getuserbyreport(item?.reporter));
+    dispatch(taskAction.getassigneduser(item?.assign_to));
   };
 
   useEffect(() => {
@@ -130,17 +135,35 @@ const HomeScreen = props => {
       .catch(error => console.log(error));
   };
 
-  const focused = (name, _id) => {
-    alert(name);
+  const focused = _id => {
+    // alert(_id);
+    if (activeUser.includes(_id)) {
+      setActiveUser(
+        activeUser.filter(function (id) {
+          return id !== _id;
+        }),
+      );
+    } else {
+      setActiveUser([...activeUser, _id]);
+    }
+
+    let data12 = tasks;
+    data12 = data12
+      .filter(function (item) {
+        return item.assign_to === _id;
+      })
+      .map(function ({title, description, comments}) {
+        return {title, description, comments};
+      });
+    console.log(data12);
   };
 
-  const comment_token = useSelector(state => state.userData.users.token);
+  const comment_token = useSelector(state => state?.userData?.users?.token);
   const id = activeItem?._id;
   const tasks_id = activeItem;
-  // console.log('CID==', tasks_id);
+  //  console.log('CID==', tasks_id);
   const user_name = useSelector(state => state?.userData?.users?.user?._id);
 
-  // console.log('NAme==', name);
   const addComment = () => {
     jira
       .post(
@@ -175,6 +198,21 @@ const HomeScreen = props => {
     tasks_id.comments = comment;
     console.warn('Comment Deleted Successfully');
     // tasks_id.save();
+  };
+  const activePanel = flag => {
+    if (flag === 'Todo') {
+      setTodoActive(true);
+      setProcessActive(false);
+      setDoneActive(false);
+    } else if (flag === 'Processing') {
+      setTodoActive(false);
+      setProcessActive(true);
+      setDoneActive(false);
+    } else if (flag === 'Done') {
+      setTodoActive(false);
+      setProcessActive(false);
+      setDoneActive(true);
+    }
   };
 
   renderInner = () => (
@@ -283,9 +321,16 @@ const HomeScreen = props => {
               contentContainerStyle={{}}
               renderItem={({item, index}) => {
                 return (
-                  <View style={{margin: 2, paddingBottom: 10}}>
+                  <View style={{margin: 2, paddingBottom: 15}}>
                     <TouchableOpacity
-                      onPress={() => focused(item.name, item._id)}>
+                      style={{
+                        backgroundColor: activeUser.includes(item._id)
+                          ? 'red'
+                          : '#e0ffff',
+                      }}
+                      onPress={() => {
+                        focused(item._id);
+                      }}>
                       <UserAvatar size={35} name={item.name} />
                     </TouchableOpacity>
                   </View>
@@ -304,25 +349,37 @@ const HomeScreen = props => {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity
-                style={styles.button}
+                style={{
+                  ...styles.button,
+                  backgroundColor: todoActive ? '#e0ffff' : 'lightgrey',
+                }}
                 onPress={() => {
                   setTaskLane(0);
+                  activePanel('Todo');
                 }}>
                 <Text style={styles.text}>To Do</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.button}
+                style={{
+                  ...styles.button,
+                  backgroundColor: processActive ? '#e0ffff' : 'lightgrey',
+                }}
                 onPress={() => {
                   setTaskLane(1);
+                  activePanel('Processing');
                 }}>
                 <Text style={styles.text}>Processing</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.button}
+                style={{
+                  ...styles.button,
+                  backgroundColor: doneActive ? '#e0ffff' : 'lightgrey',
+                }}
                 onPress={() => {
                   setTaskLane(2);
+                  activePanel('Done');
                 }}>
                 <Text style={styles.text}>Done</Text>
               </TouchableOpacity>
@@ -535,7 +592,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#e0ffff',
     height: 30,
     paddingHorizontal: 13,
     marginHorizontal: 20,

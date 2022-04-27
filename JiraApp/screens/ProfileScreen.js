@@ -120,7 +120,7 @@ const ProfileScreen = ({navigation}) => {
     const uploadUri =
       Platform.OS === 'ios' ? imagePath.replace('file://', '') : imagePath;
 
-    this.bs.current.snapTo(1);
+    bs.current.snapTo(1);
 
     setUploading(true);
     setTransferred(0);
@@ -158,7 +158,7 @@ const ProfileScreen = ({navigation}) => {
       setImage(image.path);
 
       imageUpload(image.path);
-      this.bs.current.snapTo(1);
+      bs.current.snapTo(1);
     });
   };
 
@@ -172,7 +172,7 @@ const ProfileScreen = ({navigation}) => {
       //console.log(image);
       setImage(image.path);
       imageUpload(image.path);
-      this.bs.current.snapTo(1);
+      bs.current.snapTo(1);
     });
   };
 
@@ -194,7 +194,7 @@ const ProfileScreen = ({navigation}) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.panelButton}
-        onPress={() => this.bs.current.snapTo(1)}>
+        onPress={() => bs.current.snapTo(1)}>
         <Text style={styles.panelButtonTitle}>Cancel</Text>
       </TouchableOpacity>
     </View>
@@ -207,29 +207,29 @@ const ProfileScreen = ({navigation}) => {
     </View>
   );
 
-  bs = React.createRef();
+  bs = React.useRef();
 
   fall = new Animated.Value(1);
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" />
       <BottomSheet
-        ref={this.bs}
+        ref={bs}
         snapPoints={[500, 0]} //How much it will open from bottom {x=0,y=1}
         initialSnap={1} //
-        renderContent={this.renderInner}
-        renderHeader={this.renderHeader} //imp fun()
-        callbackNode={this.fall}
+        renderContent={renderInner}
+        renderHeader={renderHeader} //imp fun()
+        callbackNode={fall}
         enabledGestureInteraction={true}
       />
       <Animated.View
         style={{
           margin: 20,
-          opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
+          opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
         }}>
         <Text style={styles.text_header}>Update Profile!</Text>
         <View style={{alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
+          <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
             <View
               style={{
                 height: 100,
